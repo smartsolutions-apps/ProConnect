@@ -1,0 +1,162 @@
+
+import { Job, JobType } from '../types';
+import { COMPANIES } from './companies';
+
+const getCompany = (id: string) => COMPANIES.find(c => c.id === id)!;
+
+export const JOBS: Job[] = [
+  {
+    id: "j_direct_1",
+    title: "Event Supervisor (Direct Offer)",
+    companyId: "c_emaar",
+    companyName: "Emaar Misr",
+    companyLogo: getCompany("c_emaar").logoUrl,
+    location: "Marassi, North Coast",
+    type: JobType.TEMPORARY,
+    postedAt: "Just now",
+    description: "We were impressed by your performance at Cairo ICT. We want you to lead the team at Sahara Expo.",
+    applicantsCount: 1,
+    salaryRange: "EGP 1,200 / Day",
+    isEasyApply: true,
+    isDirectOffer: true // <--- NEW FLAG
+  },
+  {
+    id: "j1",
+    title: "Senior Frontend Engineer",
+    companyId: "c_vodafone",
+    companyName: "Vodafone Egypt",
+    companyLogo: getCompany("c_vodafone").logoUrl,
+    location: "Smart Village, Giza",
+    type: JobType.HYBRID,
+    postedAt: "2h ago",
+    description: "Join our digital channels team to build the next generation MyVodafone App. Experience with React Native is a must.",
+    applicantsCount: 145,
+    salaryRange: "EGP 55k - 75k",
+    isEasyApply: true
+  },
+  {
+    id: "j2",
+    title: "Investment Analyst",
+    companyId: "c_cib",
+    companyName: "CIB Egypt",
+    companyLogo: getCompany("c_cib").logoUrl,
+    location: "New Cairo, Cairo",
+    type: JobType.ON_SITE,
+    postedAt: "5h ago",
+    description: "Analyze market trends and portfolio performance. CFA Level 1 required.",
+    applicantsCount: 89,
+    salaryRange: "EGP 35k - 50k",
+    isEasyApply: false
+  },
+  {
+    id: "j3",
+    title: "BIM Manager",
+    companyId: "c_emaar",
+    companyName: "Emaar Misr",
+    companyLogo: getCompany("c_emaar").logoUrl,
+    location: "Mokattam, Cairo",
+    type: JobType.ON_SITE,
+    postedAt: "1d ago",
+    description: "Oversee BIM implementation for our new North Coast projects. Revit expertise essential.",
+    applicantsCount: 42,
+    salaryRange: "EGP 40k - 60k",
+    isEasyApply: true
+  },
+  {
+    id: "j4",
+    title: "Product Owner",
+    companyId: "c_instabug",
+    companyName: "Instabug",
+    companyLogo: getCompany("c_instabug").logoUrl,
+    location: "Maadi, Cairo",
+    type: JobType.HYBRID,
+    postedAt: "3d ago",
+    description: "Drive the roadmap for our Crash Reporting tool. Work closely with engineering and design.",
+    applicantsCount: 210,
+    salaryRange: "USD 3k - 5k",
+    isEasyApply: true
+  },
+  {
+    id: "j5",
+    title: "Senior Backend Engineer (Java)",
+    companyId: "c_fawry",
+    companyName: "Fawry",
+    companyLogo: getCompany("c_fawry").logoUrl,
+    location: "Smart Village, Giza",
+    type: JobType.ON_SITE,
+    postedAt: "4h ago",
+    description: "Scale our payment processing engine. Experience with high-concurrency systems required.",
+    applicantsCount: 67,
+    salaryRange: "EGP 60k - 85k",
+    isEasyApply: false
+  },
+  {
+    id: "j6",
+    title: "Data Engineer",
+    companyId: "c_swvl",
+    companyName: "Swvl",
+    companyLogo: getCompany("c_swvl").logoUrl,
+    location: "Remote",
+    type: JobType.REMOTE,
+    postedAt: "2d ago",
+    description: "Build robust data pipelines to support our global operations.",
+    applicantsCount: 120,
+    salaryRange: "USD 2.5k - 4k",
+    isEasyApply: true
+  },
+  {
+    id: "j7",
+    title: "Sales Executive (Real Estate)",
+    companyId: "c_emaar",
+    companyName: "Emaar Misr",
+    companyLogo: getCompany("c_emaar").logoUrl,
+    location: "Sheikh Zayed, Giza",
+    type: JobType.ON_SITE,
+    postedAt: "6h ago",
+    description: "Join our top-performing sales team. Proven track record in luxury real estate required.",
+    applicantsCount: 300,
+    isEasyApply: false
+  },
+  {
+    id: "j8",
+    title: "Mobile Developer (iOS)",
+    companyId: "c_valu",
+    companyName: "Valu",
+    companyLogo: getCompany("c_valu").logoUrl,
+    location: "New Cairo, Cairo",
+    type: JobType.HYBRID,
+    postedAt: "1d ago",
+    description: "Develop new features for the Valu lifestyle app. Swift and SwiftUI expertise.",
+    applicantsCount: 95,
+    salaryRange: "EGP 45k - 65k",
+    isEasyApply: true
+  },
+  {
+    id: "j9",
+    title: "Cloud Architect",
+    companyId: "c_etisalat",
+    companyName: "Etisalat Misr",
+    companyLogo: getCompany("c_etisalat").logoUrl,
+    location: "New Cairo, Cairo",
+    type: JobType.HYBRID,
+    postedAt: "3d ago",
+    description: "Design secure and scalable cloud infrastructure on Azure/AWS.",
+    applicantsCount: 35,
+    salaryRange: "EGP 80k - 110k",
+    isEasyApply: false
+  },
+  {
+    id: "j10",
+    title: "Digital Marketing Specialist",
+    companyId: "c_swvl",
+    companyName: "Swvl",
+    companyLogo: getCompany("c_swvl").logoUrl,
+    location: "New Cairo, Cairo",
+    type: JobType.REMOTE,
+    postedAt: "5d ago",
+    description: "Manage paid acquisition campaigns across social channels.",
+    applicantsCount: 180,
+    salaryRange: "EGP 25k - 35k",
+    isEasyApply: true
+  }
+];
