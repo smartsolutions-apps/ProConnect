@@ -1,3 +1,4 @@
+
 import React, { useState, useRef, useEffect } from 'react';
 import { ChevronDown, Search, X } from 'lucide-react';
 
@@ -51,14 +52,14 @@ export const SearchableDropdown: React.FC<SearchableDropdownProps> = ({
     <div className={`relative ${className}`} ref={dropdownRef}>
       <div
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex items-center justify-between px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-100 focus:ring-1 focus:ring-brand-500 transition-colors"
+        className="w-full flex items-center justify-between px-3 py-2 bg-gray-50 dark:bg-[#2d2d2d] border border-gray-200 dark:border-[#333333] rounded-lg cursor-pointer hover:bg-gray-100 dark:hover:bg-[#3d3d3d] focus:ring-1 focus:ring-indigo-500 transition-colors"
       >
-        <span className={`text-sm truncate select-none ${value ? 'text-gray-900' : 'text-gray-500'}`}>
+        <span className={`text-sm truncate select-none ${value ? 'text-gray-900 dark:text-white' : 'text-gray-500 dark:text-gray-400'}`}>
           {value || placeholder}
         </span>
         <div className="flex items-center gap-1 ml-2">
           {value && (
-            <div role="button" onClick={clearSelection} className="p-0.5 hover:bg-gray-200 rounded-full transition-colors">
+            <div role="button" onClick={clearSelection} className="p-0.5 hover:bg-gray-200 dark:hover:bg-[#444] rounded-full transition-colors">
               <X size={14} className="text-gray-400" />
             </div>
           )}
@@ -67,13 +68,13 @@ export const SearchableDropdown: React.FC<SearchableDropdownProps> = ({
       </div>
 
       {isOpen && (
-        <div className="absolute z-50 w-full min-w-[200px] mt-1 bg-white border border-gray-200 rounded-lg shadow-xl overflow-hidden animate-in fade-in zoom-in-95 duration-100 left-0">
-          <div className="p-2 border-b border-gray-100 bg-gray-50">
+        <div className="absolute z-50 w-full min-w-[200px] mt-1 bg-white dark:bg-[#1e1e1e] border border-gray-200 dark:border-[#333333] rounded-lg shadow-xl overflow-hidden animate-in fade-in zoom-in-95 duration-100 left-0">
+          <div className="p-2 border-b border-gray-100 dark:border-[#333333] bg-gray-50 dark:bg-[#2d2d2d]">
             <div className="relative">
               <Search size={14} className="absolute left-2.5 top-2.5 text-gray-400" />
               <input
                 type="text"
-                className="w-full pl-8 pr-3 py-1.5 text-sm bg-white border border-gray-200 rounded-md focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 placeholder-gray-400"
+                className="w-full pl-8 pr-3 py-1.5 text-sm bg-white dark:bg-[#1e1e1e] border border-gray-200 dark:border-[#333333] rounded-md focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 placeholder-gray-400 dark:text-white"
                 placeholder="Search..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
@@ -84,7 +85,7 @@ export const SearchableDropdown: React.FC<SearchableDropdownProps> = ({
           </div>
           <div className="max-h-60 overflow-y-auto">
             <div 
-                className={`px-3 py-2 text-sm cursor-pointer hover:bg-brand-50 hover:text-brand-700 transition-colors ${value === '' ? 'bg-brand-50 text-brand-700 font-medium' : 'text-gray-600'}`}
+                className={`px-3 py-2 text-sm cursor-pointer hover:bg-indigo-50 dark:hover:bg-indigo-900/20 hover:text-indigo-700 dark:hover:text-indigo-300 transition-colors ${value === '' ? 'bg-indigo-50 dark:bg-indigo-900/20 text-indigo-700 dark:text-indigo-300 font-medium' : 'text-gray-600 dark:text-gray-300'}`}
                 onClick={() => handleSelect('')}
             >
                 All Locations
@@ -92,7 +93,7 @@ export const SearchableDropdown: React.FC<SearchableDropdownProps> = ({
             {filteredOptions.map((option) => (
               <div
                 key={option}
-                className={`px-3 py-2 text-sm cursor-pointer hover:bg-brand-50 hover:text-brand-700 transition-colors ${value === option ? 'bg-brand-50 text-brand-700 font-medium' : 'text-gray-600'}`}
+                className={`px-3 py-2 text-sm cursor-pointer hover:bg-indigo-50 dark:hover:bg-indigo-900/20 hover:text-indigo-700 dark:hover:text-indigo-300 transition-colors ${value === option ? 'bg-indigo-50 dark:bg-indigo-900/20 text-indigo-700 dark:text-indigo-300 font-medium' : 'text-gray-600 dark:text-gray-300'}`}
                 onClick={() => handleSelect(option)}
               >
                 {option}

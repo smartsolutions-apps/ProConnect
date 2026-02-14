@@ -1,13 +1,12 @@
 
 import { GoogleGenAI, Type } from "@google/genai";
 
-// Initialize Gemini Client
-// NOTE: In a real production app, the key should come from a secure backend proxy or environment variable.
-const apiKey = process.env.API_KEY || 'dummy-key-for-demo'; 
-const ai = new GoogleGenAI({ apiKey });
+// Note: GoogleGenAI client is initialized inside each function to ensure the most current API key from process.env.API_KEY is used.
 
 export const generateProfileSummary = async (jobTitle: string, skills: string[]): Promise<string> => {
   try {
+    // Initialize client right before the API call for fresh credentials
+    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
     const model = 'gemini-3-flash-preview';
     const prompt = `
       Act as a professional career coach for the Egyptian job market.
@@ -24,13 +23,14 @@ export const generateProfileSummary = async (jobTitle: string, skills: string[])
     return response.text || "Experienced professional seeking new opportunities in the Egyptian market.";
   } catch (error) {
     console.error("Gemini API Error:", error);
-    // Fallback for demo purposes if API key is missing
     return `Passionate ${jobTitle} with expertise in ${skills.join(', ')}. Dedicated to delivering high-quality results for top-tier organizations in Egypt.`;
   }
 };
 
 export const enhanceJobDescription = async (rawDescription: string): Promise<string> => {
   try {
+    // Initialize client right before the API call
+    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
     const model = 'gemini-3-flash-preview';
     const prompt = `
       Rewrite the following job description to be more engaging and structured with bullet points.
@@ -52,7 +52,10 @@ export const enhanceJobDescription = async (rawDescription: string): Promise<str
 
 export const generateSkillGapAnalysis = async (userSkills: string[], jobTitle: string, jobDescription: string) => {
   try {
-    const model = 'gemini-3-flash-preview';
+    // Initialize client right before the API call
+    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+    // Upgraded to gemini-3-pro-preview for higher-quality reasoning and gap analysis
+    const model = 'gemini-3-pro-preview';
     const prompt = `
       Analyze the gap between a candidate's skills and a job description.
       Candidate Skills: ${userSkills.join(', ')}
@@ -78,7 +81,9 @@ export const generateSkillGapAnalysis = async (userSkills: string[], jobTitle: s
             matchScore: { type: Type.NUMBER },
             advice: { type: Type.STRING },
             recommendedAction: { type: Type.STRING }
-          }
+          },
+          // Defined property ordering for stable structured output
+          propertyOrdering: ["missingSkills", "matchScore", "advice", "recommendedAction"]
         }
       }
     });
@@ -91,7 +96,6 @@ export const generateSkillGapAnalysis = async (userSkills: string[], jobTitle: s
 
   } catch (error) {
     console.error("Gemini API Error:", error);
-    // Fallback Mock Data
     return {
       missingSkills: ["Advanced System Design", "Kubernetes"],
       matchScore: 75,

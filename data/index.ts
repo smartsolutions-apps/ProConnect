@@ -9,8 +9,10 @@ export * from './events';
 export * from './squads';
 export * from './chat';
 export * from './zones';
-export * from './assets'; // New export
+export * from './assets';
 export * from './referenceData';
+export * from './realCompanies';
+export * from './realProjects'; // New Export
 
 import { REF_LOCATIONS, REF_UNIVERSITIES } from './referenceData';
 export const LOCATIONS = REF_LOCATIONS;

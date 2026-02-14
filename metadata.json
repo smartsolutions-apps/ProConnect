@@ -1,5 +1,8 @@
 {
   "name": "ProConnect Egypt",
   "description": "The premier professional networking and recruitment platform for the Egyptian market. Connecting top talent with leading companies like Vodafone, CIB, and Fawry through AI-driven matching.",
-  "requestFramePermissions": []
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
 }

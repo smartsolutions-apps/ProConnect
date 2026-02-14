@@ -1,69 +1,62 @@
 
 import { Company } from '../types';
 
+const BRANDFETCH_CLIENT_ID = "1idiSqP5yegNdsQZndZ";
+
 export const COMPANIES: Company[] = [
   {
-    id: "c_vodafone",
+    id: "c1",
+    // Fix: Added slug property
+    slug: "vodafone-egypt",
     name: "Vodafone Egypt",
-    logoUrl: "https://logo.clearbit.com/vodafone.com.eg",
+    domain: "vodafone.com.eg",
+    logoUrl: `https://cdn.brandfetch.io/domain/vodafone.com.eg?c=${BRANDFETCH_CLIENT_ID}`,
     industry: "Telecommunications",
     location: "Smart Village, Giza",
     description: "Leading telecommunications provider in Egypt."
   },
   {
-    id: "c_cib",
+    id: "c2",
+    // Fix: Added slug property
+    slug: "orascom-construction",
+    name: "Orascom Construction",
+    domain: "orascom.com",
+    logoUrl: `https://cdn.brandfetch.io/domain/orascom.com?c=${BRANDFETCH_CLIENT_ID}`,
+    industry: "Construction",
+    location: "Nile City Towers, Cairo",
+    description: "Global engineering and construction contractor."
+  },
+  {
+    id: "c3",
+    // Fix: Added slug property
+    slug: "cib-egypt",
     name: "CIB Egypt",
-    logoUrl: "https://logo.clearbit.com/cibeg.com",
+    domain: "cibeg.com",
+    logoUrl: `https://cdn.brandfetch.io/domain/cibeg.com?c=${BRANDFETCH_CLIENT_ID}`,
     industry: "Banking",
     location: "New Cairo, Cairo",
     description: "The leading private sector bank in Egypt."
   },
   {
-    id: "c_swvl",
-    name: "Swvl",
-    logoUrl: "https://logo.clearbit.com/swvl.com",
-    industry: "Tech / Transportation",
-    location: "New Cairo, Cairo",
-    description: "Transforming mass transit with technology."
-  },
-  {
-    id: "c_instabug",
-    name: "Instabug",
-    logoUrl: "https://logo.clearbit.com/instabug.com",
-    industry: "Software",
-    location: "Maadi, Cairo",
-    description: "Comprehensive bug reporting and APM for mobile apps."
-  },
-  {
-    id: "c_emaar",
-    name: "Emaar Misr",
-    logoUrl: "https://logo.clearbit.com/emaar.com",
-    industry: "Real Estate",
-    location: "Mokattam, Cairo",
-    description: "Developing world-class communities in Egypt."
-  },
-  {
-    id: "c_fawry",
+    id: "c4",
+    // Fix: Added slug property
+    slug: "fawry",
     name: "Fawry",
-    logoUrl: "https://logo.clearbit.com/fawry.com",
+    domain: "fawry.com",
+    logoUrl: `https://cdn.brandfetch.io/domain/fawry.com?c=${BRANDFETCH_CLIENT_ID}`,
     industry: "Fintech",
     location: "Smart Village, Giza",
     description: "The leading digital transformation & e-payments platform."
   },
   {
-    id: "c_etisalat",
-    name: "Etisalat Misr",
-    logoUrl: "https://logo.clearbit.com/etisalat.eg",
-    industry: "Telecommunications",
+    id: "c5",
+    // Fix: Added slug property
+    slug: "swvl",
+    name: "Swvl",
+    domain: "swvl.com",
+    logoUrl: `https://cdn.brandfetch.io/domain/swvl.com?c=${BRANDFETCH_CLIENT_ID}`,
+    industry: "Tech / Transportation",
     location: "New Cairo, Cairo",
-    description: "Premium telecom services and digital solutions."
-  },
-  {
-    id: "c_valu",
-    name: "Valu",
-    logoUrl: "https://logo.clearbit.com/valu.com.eg",
-    industry: "Fintech",
-    location: "New Cairo, Cairo",
-    description: "Buy Now, Pay Later lifestyle enabling solution."
+    description: "Transforming mass transit with technology."
   }
 ];

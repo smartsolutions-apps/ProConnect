@@ -160,10 +160,14 @@ export interface SkillInsight {
   recommendedAction: string; // e.g., "Take a course on Coursera"
 }
 
-export type UserRole = 'seeker' | 'company' | 'admin';
+// UPDATED: User roles for Claim Profile Architecture
+export type UserRole = 'user' | 'company_admin' | 'super_admin' | 'seeker' | 'company' | 'admin';
 
 export interface User {
   id: string;
+  slug: string; // Added for SEO Routing
+  uid?: string; // Added for Auth syncing
+  email?: string; // Added for Auth syncing
   name: string;
   headline: string;
   avatarUrl: string;
@@ -195,20 +199,42 @@ export interface User {
 
   // SKILL GAP ANALYSIS
   skillInsights?: SkillInsight[];
+
+  // CLAIM PROFILE ARCHITECTURE
+  role: UserRole;
+  managedCompanyId?: string; // Links them to the company they claimed
 }
 
 export interface Company {
   id: string;
+  slug: string; // Added for SEO Routing
   name: string;
   logoUrl: string;
   industry: string;
   location: string;
+  type?: string; // Added for categorization (Developer, Brokerage, etc.)
   description?: string;
   attendingEvents?: string[]; // IDs of events they are attending
+  isVerified?: boolean; // Added for Super Admin verification
+  isClaimed?: boolean; // Added for Claim architecture
+  domain?: string; // Original domain for reference
+}
+
+export interface Project {
+  id: string;
+  companyId: string;
+  name: string;
+  location: string;
+  type: string;
+  status: 'Launching Soon' | 'Under Construction' | 'Selling Now' | 'Ready to Move' | 'New Phase Launch';
+  startingPrice: string;
+  paymentPlan: string;
+  imageUrl?: string;
 }
 
 export interface Job {
   id: string;
+  slug: string; // Added for SEO Routing
   title: string;
   companyId: string;
   companyName: string;
@@ -228,6 +254,7 @@ export interface Application {
   jobId: string;
   jobTitle: string;
   companyName: string;
+  // Fix: companyLogo type was incorrectly set to 'status', changed to 'string'
   companyLogo: string;
   status: ApplicationStatus;
   appliedDate: string; // ISO String

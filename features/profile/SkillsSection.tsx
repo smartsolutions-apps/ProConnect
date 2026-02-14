@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { User } from '../../types';
-import { ShieldCheck, Plus, Zap, Award } from 'lucide-react';
+import { ShieldCheck, Plus, Zap, Award, BookOpen, ChevronRight } from 'lucide-react';
 import { SkillQuizModal } from './SkillQuizModal';
 
 interface SkillsSectionProps {
@@ -21,48 +21,64 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({ user, isRecruiterV
   };
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-      <div className="flex justify-between items-center mb-6">
-        <h3 className="text-lg font-bold text-gray-900 flex items-center gap-2">
-          <Zap className="text-brand-600" size={20} />
-          Skills & Endorsements
-        </h3>
+    <div className="bg-white dark:bg-[#1e1e1e] rounded-3xl shadow-sm border border-slate-100 dark:border-[#333333] p-6 lg:p-8 transition-colors">
+      <div className="flex justify-between items-start mb-8">
+        <div>
+          <h3 className="text-xl font-black text-slate-900 dark:text-white flex items-center gap-3">
+            <div className="p-2 bg-indigo-50 dark:bg-indigo-900/30 rounded-xl">
+              <Zap className="text-indigo-600 dark:text-indigo-400" size={24} />
+            </div>
+            Skills Verification
+          </h3>
+          <p className="text-sm text-slate-500 dark:text-slate-400 mt-2">
+            Get your skills independently verified by our AI assessment engine.
+          </p>
+        </div>
         {!isRecruiterView && (
-          <button className="text-sm text-brand-600 font-bold hover:underline flex items-center gap-1">
-            <Plus size={16} /> Add Skill
+          <button className="flex items-center gap-2 px-4 py-2 text-sm font-bold text-indigo-600 dark:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 rounded-full transition-colors">
+            <Plus size={18} /> Add Skill
           </button>
         )}
       </div>
 
-      <div className="flex flex-wrap gap-3">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {user.skills.map((skill) => {
           const isVerified = verifiedSkills.includes(skill);
 
           return (
             <div 
               key={skill}
-              className={`group flex items-center gap-2 px-4 py-2 rounded-full border transition-all duration-300 ${
+              className={`group flex items-center justify-between p-4 rounded-2xl border transition-all duration-300 ${
                 isVerified 
-                  ? 'bg-yellow-50 border-yellow-200 text-yellow-900 shadow-sm' 
-                  : 'bg-white border-gray-200 text-gray-700 hover:border-gray-300'
+                  ? 'bg-amber-50/50 dark:bg-amber-900/10 border-amber-200 dark:border-amber-900/50 shadow-sm' 
+                  : 'bg-slate-50 dark:bg-[#2d2d2d] border-slate-100 dark:border-[#333333] hover:border-indigo-200 dark:hover:border-indigo-800'
               }`}
             >
-              <span className="font-bold text-sm">{skill}</span>
+              <div className="flex items-center gap-3">
+                <div className={`p-2 rounded-lg ${isVerified ? 'bg-amber-100 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400' : 'bg-white dark:bg-[#1e1e1e] text-slate-400 dark:text-slate-500'}`}>
+                  {isVerified ? <ShieldCheck size={20} /> : <BookOpen size={20} />}
+                </div>
+                <div>
+                  <span className="font-black text-slate-900 dark:text-white text-sm">{skill}</span>
+                  {isVerified && (
+                    <p className="text-[10px] font-black text-amber-600 dark:text-amber-400 uppercase tracking-widest">Gold Verified</p>
+                  )}
+                </div>
+              </div>
               
               {isVerified ? (
-                <div className="flex items-center gap-1" title="Gold Verified Badge">
-                  <div className="w-5 h-5 bg-gradient-to-br from-yellow-300 to-yellow-500 rounded-full flex items-center justify-center shadow-sm">
-                    <ShieldCheck size={12} className="text-yellow-900" />
-                  </div>
+                <div className="flex items-center gap-1 bg-white dark:bg-[#1e1e1e] px-2 py-1 rounded-lg border border-amber-200 dark:border-amber-900/50 shadow-sm">
+                   <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                   <span className="text-[10px] font-bold text-slate-600 dark:text-slate-400">Trusted</span>
                 </div>
               ) : (
                 !isRecruiterView && (
                   <button 
                     onClick={() => setActiveQuizSkill(skill)}
-                    className="text-[10px] font-bold bg-gray-900 text-white px-2 py-0.5 rounded ml-1 opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1 hover:bg-brand-600"
+                    className="flex items-center gap-1 px-3 py-1.5 bg-white dark:bg-[#1e1e1e] hover:bg-indigo-600 dark:hover:bg-indigo-500 hover:text-white text-indigo-600 dark:text-indigo-400 text-xs font-black rounded-xl border border-indigo-100 dark:border-indigo-900/50 transition-all active:scale-95 shadow-sm group-hover:border-indigo-500"
                   >
-                    <Award size={10} />
-                    Verify
+                    Take 5-min Quiz
+                    <ChevronRight size={14} />
                   </button>
                 )
               )}
@@ -72,9 +88,13 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({ user, isRecruiterV
       </div>
 
       {isRecruiterView && verifiedSkills.length > 0 && (
-        <div className="mt-4 pt-4 border-t border-gray-100 flex items-center gap-2 text-xs text-yellow-700 font-medium">
-          <ShieldCheck size={14} className="text-yellow-500" />
-          {verifiedSkills.length} skills verified by ProConnect technical assessment.
+        <div className="mt-8 p-4 bg-emerald-50 dark:bg-emerald-900/10 rounded-2xl border border-emerald-100 dark:border-emerald-900/30 flex items-center gap-3">
+          <div className="p-2 bg-white dark:bg-[#1e1e1e] rounded-full text-emerald-600 dark:text-emerald-400 shadow-sm">
+            <Award size={20} />
+          </div>
+          <p className="text-xs font-bold text-emerald-800 dark:text-emerald-300">
+            {verifiedSkills.length} Core skills verified. This candidate ranks in the top 5% of our pool.
+          </p>
         </div>
       )}
 

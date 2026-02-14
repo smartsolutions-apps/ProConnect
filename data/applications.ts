@@ -3,17 +3,23 @@ import { Application, ApplicationStatus } from '../types';
 import { JOBS } from './jobs';
 import { COMPANIES } from './companies';
 
-// Helper to get job details easily
-const getJob = (id: string) => JOBS.find(j => j.id === id)!;
-const getCompany = (id: string) => COMPANIES.find(c => c.id === id)!;
+// Helper to get company details by ID
+const getCompany = (id: string) => {
+  const company = COMPANIES.find(c => c.id === id);
+  if (!company) {
+    // Fallback for safety during development
+    return { name: "Unknown", logoUrl: "https://logo.clearbit.com/google.com" };
+  }
+  return company;
+};
 
 export const MY_APPLICATIONS: Application[] = [
   {
     id: "a1",
-    jobId: "j1",
+    jobId: "j1", // Matches Senior Frontend Engineer in data/jobs.ts
     jobTitle: "Senior Frontend Engineer",
     companyName: "Vodafone Egypt",
-    companyLogo: getCompany("c_vodafone").logoUrl,
+    companyLogo: getCompany("c1").logoUrl,
     status: ApplicationStatus.VIEWED,
     // Applied 10 days ago
     appliedDate: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString(),
@@ -23,10 +29,10 @@ export const MY_APPLICATIONS: Application[] = [
   },
   {
     id: "a2",
-    jobId: "j4",
-    jobTitle: "Product Owner",
-    companyName: "Instabug",
-    companyLogo: getCompany("c_instabug").logoUrl,
+    jobId: "j3", // Matches Product Manager in data/jobs.ts
+    jobTitle: "Product Manager (FinTech)",
+    companyName: "CIB Egypt",
+    companyLogo: getCompany("c3").logoUrl,
     status: ApplicationStatus.INTERVIEW,
     // Applied 14 days ago
     appliedDate: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000).toISOString(),
@@ -36,10 +42,10 @@ export const MY_APPLICATIONS: Application[] = [
   },
   {
     id: "a3",
-    jobId: "j5",
+    jobId: "j5", // External ID or manually added
     jobTitle: "Senior Backend Engineer",
     companyName: "Fawry",
-    companyLogo: getCompany("c_fawry").logoUrl,
+    companyLogo: getCompany("c4").logoUrl,
     status: ApplicationStatus.APPLIED,
     // Applied 2 days ago
     appliedDate: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),

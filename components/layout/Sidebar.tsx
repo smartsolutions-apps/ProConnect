@@ -1,62 +1,65 @@
 
 import React from 'react';
 import { User } from '../../types';
-import { EyeOff } from 'lucide-react';
+import { EyeOff, UserCircle, Settings, LogOut, ChevronRight } from 'lucide-react';
 
 interface SidebarProps {
   user: User;
   isStealthMode?: boolean;
-  onNavigate?: (tab: 'feed' | 'jobs' | 'profile' | 'applications') => void;
+  onNavigate?: (tab: any) => void;
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({ user, isStealthMode = false, onNavigate }) => {
   return (
-    <div className={`rounded-xl shadow-sm border p-6 sticky top-24 transition-colors duration-300 ${isStealthMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'}`}>
-      <div className={`text-center border-b pb-4 mb-4 ${isStealthMode ? 'border-gray-700' : 'border-gray-100'}`}>
-        <div className="relative inline-block">
-          {isStealthMode ? (
-              <div className="w-20 h-20 rounded-full mx-auto border-4 border-gray-700 bg-gray-600 flex items-center justify-center text-gray-300 shadow-sm">
-                  <EyeOff size={32} />
+    <div className="space-y-4">
+      <div className="bg-white dark:bg-[#1e1e1e] rounded-3xl p-6 border border-slate-100 dark:border-[#333333] shadow-sm">
+        <div className="flex flex-col items-center text-center">
+          <div className="relative group cursor-pointer" onClick={() => onNavigate?.('profile')}>
+            {isStealthMode ? (
+              <div className="w-20 h-20 rounded-full bg-slate-800 flex items-center justify-center text-white">
+                <EyeOff size={32} />
               </div>
-          ) : (
-             <>
-                <img 
-                    src={user.avatarUrl} 
-                    alt="Profile" 
-                    className="w-20 h-20 rounded-full mx-auto border-4 border-white shadow-sm"
-                />
-                <div className="absolute bottom-0 right-0 w-5 h-5 bg-green-500 border-2 border-white rounded-full"></div>
-             </>
-          )}
-        </div>
-        <h3 className={`mt-3 text-lg font-bold ${isStealthMode ? 'text-white' : 'text-gray-900'}`}>
-            {isStealthMode ? 'Anonymous Candidate' : user.name}
-        </h3>
-        <p className={`text-sm leading-tight px-4 ${isStealthMode ? 'text-gray-400' : 'text-gray-500'}`}>
-            {isStealthMode ? 'Senior Engineer @ Top Tech Co.' : user.headline}
-        </p>
-      </div>
-      
-      <div className="space-y-3">
-        <div className="flex justify-between items-center text-sm">
-          <span className={isStealthMode ? 'text-gray-400' : 'text-gray-500'}>Profile views</span>
-          <span className="font-semibold text-brand-600">142</span>
-        </div>
-        <div className="flex justify-between items-center text-sm">
-          <span className={isStealthMode ? 'text-gray-400' : 'text-gray-500'}>Post impressions</span>
-          <span className="font-semibold text-brand-600">1.2k</span>
-        </div>
-        <div className={`pt-4 border-t ${isStealthMode ? 'border-gray-700' : 'border-gray-100'}`}>
-          <p className={`text-xs font-semibold uppercase tracking-wider mb-2 ${isStealthMode ? 'text-gray-500' : 'text-gray-400'}`}>My Items</p>
-          <div 
-            onClick={() => onNavigate && onNavigate('applications')}
-            className={`flex items-center gap-2 text-sm cursor-pointer py-1 ${isStealthMode ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-brand-600'}`}
-          >
-            <span className="w-2 h-2 bg-brand-500 rounded-full"></span>
-            My Applications (3)
+            ) : (
+              <img src={user.avatarUrl} alt="" className="w-20 h-20 rounded-full border-4 border-slate-50 dark:border-[#2d2d2d] object-cover shadow-sm group-hover:scale-105 transition-transform" />
+            )}
           </div>
+          <h3 className="mt-4 font-black text-slate-900 dark:text-white tracking-tight">
+            {isStealthMode ? 'Anonymous' : user.name}
+          </h3>
+          <p className="text-[11px] font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-widest mt-1">
+            {user.careerLevel || 'Premium Seeker'}
+          </p>
         </div>
+
+        <div className="mt-8 space-y-1">
+          <SidebarLink icon={<UserCircle size={18}/>} label="My Profile" onClick={() => onNavigate?.('profile')} />
+          <SidebarLink icon={<Settings size={18}/>} label="Preferences" onClick={() => onNavigate?.('settings')} />
+          <SidebarLink icon={<LogOut size={18}/>} label="Sign Out" danger />
+        </div>
+      </div>
+
+      <div className="bg-indigo-600 rounded-3xl p-5 text-white shadow-xl shadow-indigo-200 dark:shadow-none">
+        <p className="text-[10px] font-black uppercase tracking-widest opacity-80 mb-2">Pro Bonus</p>
+        <h4 className="font-bold leading-tight mb-4">Complete your profile to unlock high-pay gigs</h4>
+        <button className="w-full py-2.5 bg-white text-indigo-600 rounded-full text-xs font-black uppercase tracking-wider hover:bg-indigo-50 transition-colors">
+          Start Wizard
+        </button>
       </div>
     </div>
   );
 };
+
+const SidebarLink = ({ icon, label, onClick, danger }: any) => (
+  <button 
+    onClick={onClick}
+    className={`w-full flex items-center justify-between p-3 rounded-2xl transition-colors ${
+      danger ? 'text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-900/10' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-[#2d2d2d] hover:text-slate-900 dark:hover:text-white'
+    }`}
+  >
+    <div className="flex items-center gap-3">
+      {icon}
+      <span className="text-sm font-bold">{label}</span>
+    </div>
+    <ChevronRight size={14} className="opacity-40" />
+  </button>
+);

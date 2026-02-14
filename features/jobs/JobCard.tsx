@@ -1,147 +1,104 @@
 
 import React from 'react';
-import { MapPin, Building2, Zap, Timer, CheckCircle2, ArrowRight, Hourglass, Star, Crown, AlertTriangle } from 'lucide-react';
+import { MapPin, Building2, Zap, Timer, CheckCircle2, ArrowRight } from 'lucide-react';
 import { Job, JobType } from '../../types';
-import { CURRENT_USER } from '../../data';
+import { useHydratedData } from '../../context/DataHydrationContext';
 
 interface JobCardProps {
   job: Job;
-  userLocation: string;
   onApply: (job: Job) => void;
+  userLocation?: string;
 }
 
-export const JobCard: React.FC<JobCardProps> = ({ job, onApply }) => {
-  // Parsing Salary for visual display
-  const isHighSalary = job.salaryRange?.includes('k') && parseInt(job.salaryRange) > 50;
-  
-  // Pivot Logic: Urgent/Temp Jobs get distinct styling
+const BRANDFETCH_CLIENT_ID = "1idiSqP5yegNdsQZndZ";
+const FALLBACK_LOGO = "https://ui-avatars.com/api/?name=Real+Estate&background=0D8ABC&color=fff&rounded=true&bold=true";
+
+export const JobCard: React.FC<JobCardProps> = ({ job, onApply, userLocation }) => {
+  const { companies } = useHydratedData();
   const isTemp = job.type === JobType.TEMPORARY || job.type === JobType.INTERNSHIP;
   const isDirectOffer = job.isDirectOffer;
 
-  // Check for Skill Gaps (Simulated check against User Insights)
-  const skillGap = CURRENT_USER.skillInsights?.find(si => si.jobId === job.id);
+  // Resolve company domain for Brandfetch Logo
+  const company = companies.find(c => c.id === job.companyId || c.name === job.companyName);
+  const domain = company?.domain || job.companyName.toLowerCase().replace(/\s/g, '') + '.com';
+  
+  // Brandfetch URL Structure
+  const logoUrl = `https://cdn.brandfetch.io/domain/${domain}?c=${BRANDFETCH_CLIENT_ID}`;
 
   return (
-    <div className={`bg-white rounded-2xl p-5 border shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group relative overflow-hidden ${
-        isDirectOffer ? 'border-yellow-300 bg-gradient-to-br from-white to-yellow-50' : 
-        isTemp ? 'border-amber-200 bg-amber-50/10' : 
-        'border-gray-100'
+    <div className={`bg-white dark:bg-[#1e1e1e] rounded-2xl p-6 border transition-all duration-300 group mb-4 ${
+        isDirectOffer ? 'border-amber-300 dark:border-amber-900 shadow-amber-100 dark:shadow-none bg-amber-50/30 dark:bg-amber-900/10' : 
+        'border-slate-200 dark:border-[#2c2c2c] hover:border-blue-200 dark:hover:border-blue-900 shadow-sm hover:shadow-lg'
     }`}>
       
-      {/* Top Decoration Line */}
-      <div className={`absolute top-0 left-0 w-full h-1 ${
-          isDirectOffer ? 'bg-gradient-to-r from-yellow-400 to-amber-500' :
-          isTemp ? 'bg-amber-400' : 
-          isHighSalary ? 'bg-gradient-to-r from-green-400 to-emerald-600' : 
-          'bg-transparent'
-      }`}></div>
-
-      {isDirectOffer && (
-          <div className="mb-3 flex items-center gap-2">
-              <span className="bg-yellow-100 text-yellow-800 text-[10px] font-bold px-2 py-1 rounded-full flex items-center gap-1 border border-yellow-200">
-                  <Crown size={12} className="fill-yellow-600 text-yellow-600"/> DIRECT OFFER
-              </span>
-              <span className="text-xs text-yellow-700 font-medium">You were hand-picked for this role!</span>
-          </div>
-      )}
-
-      {/* SKILL GAP WARNING (INLINE HINT) */}
-      {skillGap && (
-          <div className="mb-3 flex items-start gap-2 bg-red-50 p-2 rounded-lg border border-red-100">
-              <AlertTriangle size={14} className="text-red-500 mt-0.5 flex-shrink-0" />
-              <div>
-                  <p className="text-xs font-bold text-red-700">Missing Skills Detected</p>
-                  <p className="text-[10px] text-red-600 leading-tight">
-                      You are missing <strong>{skillGap.missingSkills[0]}</strong>. 
-                      Match Score: {skillGap.matchScore}%
-                  </p>
-              </div>
-          </div>
-      )}
-
-      <div className="flex items-start gap-4">
-        {/* Logo */}
-        <div className="w-14 h-14 rounded-xl border border-gray-100 overflow-hidden flex-shrink-0 bg-white shadow-sm">
-          <img src={job.companyLogo} alt={job.companyName} className="w-full h-full object-contain p-1" />
+      <div className="flex items-start gap-5">
+        {/* Company Identity */}
+        <div className="w-14 h-14 rounded-2xl border border-slate-100 dark:border-[#333333] overflow-hidden flex-shrink-0 bg-white dark:bg-[#2d2d2d] shadow-sm p-2 flex items-center justify-center">
+          <img 
+            src={logoUrl} 
+            alt={job.companyName} 
+            className="w-full h-full object-contain" 
+            onError={(e) => { e.currentTarget.src = FALLBACK_LOGO; }}
+          />
         </div>
 
-        {/* Header Info */}
+        {/* Content Section */}
         <div className="flex-1 min-w-0">
-          <div className="flex justify-between items-start">
+          <div className="flex justify-between items-start mb-2">
             <div>
-               <h3 className="font-bold text-lg text-gray-900 leading-tight group-hover:text-brand-600 transition-colors truncate pr-4">
-                 {job.title}
-               </h3>
-               <p className="text-sm font-medium text-gray-500 mt-1 flex items-center gap-1.5">
-                  {job.companyName}
-                  {job.isEasyApply && !isDirectOffer && <CheckCircle2 size={12} className="text-blue-500" />}
-               </p>
+              <h3 className="font-black text-lg text-slate-900 dark:text-white leading-tight group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors truncate">
+                {job.title}
+              </h3>
+              <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5 flex items-center gap-1.5">
+                {job.companyName}
+                {job.isEasyApply && <CheckCircle2 size={14} className="text-blue-500" />}
+              </p>
             </div>
-            {isTemp ? (
-                <span className="flex-shrink-0 text-[10px] font-bold text-amber-700 bg-amber-100 px-2 py-1 rounded-full whitespace-nowrap flex items-center gap-1">
-                   <Hourglass size={10} /> Urgent
-                </span>
-            ) : job.postedAt.includes('h') && (
-                <span className="flex-shrink-0 text-[10px] font-bold text-brand-600 bg-brand-50 px-2 py-1 rounded-full whitespace-nowrap">
-                   New
-                </span>
+            
+            {isDirectOffer && (
+              <span className="flex-shrink-0 bg-amber-100 dark:bg-amber-900/50 text-amber-700 dark:text-amber-300 text-[10px] font-black px-2.5 py-1 rounded-full uppercase tracking-tighter border border-amber-200 dark:border-amber-800">
+                Direct Offer
+              </span>
             )}
           </div>
-        </div>
-      </div>
 
-      {/* Badge Cloud (Progressive Disclosure: Info instead of Text) */}
-      <div className="mt-5 flex flex-wrap gap-2">
-         {/* Location Badge */}
-         <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gray-50 text-xs font-medium text-gray-600 border border-gray-100">
-            <MapPin size={12} className="text-gray-400" />
-            {job.location.split(',')[0]}
-         </div>
-         
-         {/* Type Badge - Special Color for Temp/Intern */}
-         <div className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium border ${isTemp ? 'bg-amber-50 text-amber-700 border-amber-100' : 'bg-gray-50 text-gray-600 border-gray-100'}`}>
-            <Building2 size={12} className={isTemp ? "text-amber-600" : "text-gray-400"} />
-            {job.type}
-         </div>
-
-         {/* Salary Badge (Highlighted) */}
-         {job.salaryRange && (
-            <div className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold border ${isDirectOffer ? 'bg-green-100 text-green-800 border-green-200' : 'bg-green-50 text-green-700 border-green-100'}`}>
+          {/* Metadata Row */}
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-2 mt-4 text-[13px] text-slate-600 dark:text-slate-400">
+            <span className="flex items-center gap-1.5"><MapPin size={16} className="text-slate-400" /> {job.location.split(',')[0]}</span>
+            <span className="flex items-center gap-1.5"><Building2 size={16} className="text-slate-400" /> {job.type}</span>
+            {job.salaryRange && (
+              <span className="font-bold text-emerald-600 dark:text-emerald-400 px-2 py-0.5 bg-emerald-50 dark:bg-emerald-900/20 rounded-md">
                 {job.salaryRange}
-            </div>
-         )}
-      </div>
-
-      {/* Action Footer */}
-      <div className="mt-6 pt-4 border-t border-gray-50 flex items-center justify-between gap-3">
-         <div className="text-xs text-gray-400 font-medium flex items-center gap-1">
-            <Timer size={12} /> {job.postedAt} • {job.applicantsCount} applicants
-         </div>
-
-         <div className="flex gap-2">
-            {isDirectOffer ? (
-                <button 
-                  onClick={() => onApply(job)}
-                  className="pl-3 pr-4 py-2 bg-yellow-500 hover:bg-yellow-600 text-white text-xs font-bold rounded-xl active:scale-95 transition-all shadow-md shadow-yellow-200 flex items-center gap-1.5"
-                >
-                  <Star size={14} className="fill-white" /> Accept Offer
-                </button>
-            ) : job.isEasyApply ? (
-                <button 
-                  onClick={() => onApply(job)}
-                  className={`pl-3 pr-4 py-2 text-white text-xs font-bold rounded-xl active:scale-95 transition-all shadow-md flex items-center gap-1.5 ${isTemp ? 'bg-amber-600 hover:bg-amber-700 shadow-amber-200' : 'bg-brand-600 hover:bg-brand-700 shadow-brand-200'}`}
-                >
-                  <Zap size={14} className="fill-white" /> {isTemp ? 'Gig Apply' : '1-Click Apply'}
-                </button>
-            ) : (
-                <button 
-                  onClick={() => onApply(job)}
-                  className="px-4 py-2 bg-gray-900 text-white text-xs font-bold rounded-xl hover:bg-gray-800 transition-all flex items-center gap-2"
-                >
-                  Apply <ArrowRight size={12} />
-                </button>
+              </span>
             )}
-         </div>
+            {userLocation && userLocation !== job.location && (
+               <span className="text-[11px] text-slate-400 hidden sm:inline">
+                 • Near {userLocation.split(',')[0]}
+               </span>
+            )}
+          </div>
+
+          {/* Actions */}
+          <div className="mt-6 pt-5 border-t border-slate-100 dark:border-[#2c2c2c] flex items-center justify-between">
+            <span className="text-[11px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-1">
+              <Timer size={12} /> {job.postedAt} • {job.applicantsCount} Applied
+            </span>
+
+            <button 
+              onClick={() => onApply(job)}
+              className={`px-6 py-2.5 rounded-full font-black text-xs uppercase tracking-widest transition-all active:scale-95 shadow-md flex items-center gap-2 ${
+                isDirectOffer 
+                  ? 'bg-amber-500 hover:bg-amber-600 text-white shadow-amber-200 dark:shadow-none' 
+                  : isTemp 
+                    ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400 hover:bg-blue-200' 
+                    : 'bg-blue-600 text-white hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-400'
+              }`}
+            >
+              {isDirectOffer ? 'Claim Offer' : isTemp ? 'Gig Apply' : 'Quick Apply'}
+              <ArrowRight size={14} />
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );

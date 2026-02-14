@@ -4,218 +4,160 @@ import { User, UserAvailability } from '../types';
 export const USERS: User[] = [
   {
     id: "u_me",
+    // Fix: Added slug property
+    slug: "mohamed-ali",
+    uid: "mohamed_123",
+    email: "mohamed@emaar.com",
     name: "Mohamed Ali",
-    headline: "Senior React Developer | Ex-Vodafone",
-    avatarUrl: "https://i.pravatar.cc/150?u=u_me",
+    role: "user", // Part of Claim Profile Architecture
+    headline: "Lead Frontend Engineer @ Emaar",
+    avatarUrl: "https://i.pravatar.cc/150?u=mohamed",
     location: "New Cairo, Cairo",
     university: "American University in Cairo (AUC)",
-    skills: ["React", "TypeScript", "Node.js", "Firebase", "System Design"],
-    verifiedSkills: ["TypeScript", "System Design"], // Initial verified skills
+    skills: ["React", "TypeScript", "Node.js", "System Design"],
+    verifiedSkills: ["TypeScript", "System Design"],
     workStyle: {
-      leadership: 7,
+      leadership: 8,
       teamwork: 9,
-      independence: 6,
+      independence: 7,
       creativity: 8,
-      logic: 8
+      logic: 9
     },
-    availability: UserAvailability.ONE_MONTH_NOTICE,
+    availability: UserAvailability.OPEN_TO_OFFERS,
     salaryExpectations: {
-      min: 45000,
-      expected: 60000,
+      min: 55000,
+      expected: 75000,
       currency: 'EGP',
       period: 'Monthly'
     },
-    softSkills: [
-        { id: 'sb1', type: 'PROBLEM_SOLVER', endorsements: 12 },
-        { id: 'sb2', type: 'MORALE_BOOSTER', endorsements: 5 },
-        { id: 'sb3', type: 'PUNCTUAL', endorsements: 8 }
-    ],
-    interviewAvailability: {
-      days: ["Mon", "Wed", "Fri"],
-      startHour: 17, // 5 PM
-      endHour: 20    // 8 PM
-    },
-    challenges: [
-      {
-        type: 'CODE',
-        id: 'ch_1',
-        title: "Optimizing Virtual List Performance",
-        description: "Reduced render time for a 10,000 item list by 85% using windowing.",
-        language: "typescript",
-        solutionExplanation: "The initial implementation rendered all DOM nodes at once, causing UI freeze. I implemented a custom virtualizer to only render items in the viewport + buffer.",
-        code: `
-// Custom Virtualizer Hook
-const useVirtualizer = ({ itemCount, itemHeight, containerHeight }) => {
-  const [scrollTop, setScrollTop] = useState(0);
-
-  const startIndex = Math.floor(scrollTop / itemHeight);
-  const endIndex = Math.min(
-    itemCount - 1,
-    Math.floor((scrollTop + containerHeight) / itemHeight)
-  );
-
-  const visibleItems = useMemo(() => {
-    return Array.from({ length: endIndex - startIndex + 1 }, (_, i) => ({
-      index: i + startIndex,
-      style: {
-        position: 'absolute',
-        top: (i + startIndex) * itemHeight,
-        height: itemHeight,
-      },
-    }));
-  }, [startIndex, endIndex, itemHeight]);
-
-  return { visibleItems, onScroll: (e) => setScrollTop(e.target.scrollTop) };
-};
-        `.trim()
-      }
-    ],
-    shiftsBooked: 24,
-    shiftsCompleted: 23, // 96% Reliability
-    careerLevel: 'LEAD', // <--- CAREER LEVEL ADDED
+    shiftsBooked: 45,
+    shiftsCompleted: 44,
+    careerLevel: 'LEAD',
     wallet: {
-        balance: 4500,
-        pending: 1200,
-        history: [
-            { id: 'txn_1', title: 'Cityscape - Usher', date: '2d ago', amount: 450, status: 'PENDING', type: 'EARNING' },
-            { id: 'txn_2', title: 'Auto Mach - Model', date: '1w ago', amount: 750, status: 'PENDING', type: 'EARNING' },
-            { id: 'txn_3', title: 'Withdrawal to Vodafone Cash', date: '2w ago', amount: -2000, status: 'COMPLETED', type: 'WITHDRAWAL', method: 'Vodafone Cash' },
-            { id: 'txn_4', title: 'Cairo ICT Day 3', date: '2w ago', amount: 500, status: 'COMPLETED', type: 'EARNING' },
-            { id: 'txn_5', title: 'Cairo ICT Day 2', date: '2w ago', amount: 500, status: 'COMPLETED', type: 'EARNING' },
-            { id: 'txn_6', title: 'Cairo ICT Day 1', date: '2w ago', amount: 500, status: 'COMPLETED', type: 'EARNING' }
-        ]
+        balance: 12500,
+        pending: 3500,
+        history: []
     },
-    gamification: { points: 1250, rank: 42, badges: ['Top Rated', 'Speedy'] },
-    rating: 4.9,
-    skillInsights: [
-      {
-        id: 'si_1',
-        jobId: 'j5', // Fawry (Java Backend)
-        jobTitle: 'Senior Backend Engineer (Java)',
-        companyName: 'Fawry',
-        date: '2 days ago',
-        matchScore: 65,
-        missingSkills: ['Java', 'Spring Boot', 'Microservices Architecture'],
-        advice: 'Your Node.js background is strong, but Fawry\'s core payments infrastructure relies heavily on Java. Pivot to Spring Boot to unlock fintech roles.',
-        recommendedAction: 'Udemy: Java Spring Boot Masterclass'
-      },
-      {
-        id: 'si_2',
-        jobId: 'j9', // Etisalat (Cloud Architect)
-        jobTitle: 'Cloud Architect',
-        companyName: 'Etisalat Misr',
-        date: '1 week ago',
-        matchScore: 72,
-        missingSkills: ['Azure DevOps', 'Advanced Networking'],
-        advice: 'You have good general cloud knowledge, but this role specifically requires deep Azure networking expertise.',
-        recommendedAction: 'Microsoft Certified: Azure Solutions Architect Expert'
-      }
-    ]
+    gamification: {
+      points: 2450,
+      rank: 12,
+      badges: ["Early Adopter", "Verified Expert"]
+    },
+    rating: 4.9
   },
   {
-    id: "u_sarah",
+    id: "u2",
+    // Fix: Added slug property
+    slug: "sarah-el-sayed",
     name: "Sarah El-Sayed",
-    headline: "HR Director at Orange Egypt",
-    avatarUrl: "https://i.pravatar.cc/150?u=u_sarah",
-    location: "Smart Village, Giza",
-    skills: ["Talent Acquisition", "HR Strategy", "Leadership"],
-    verifiedSkills: ["Talent Acquisition"],
-    shiftsBooked: 10,
-    shiftsCompleted: 10,
-    careerLevel: 'EXPERIENCED',
-    gamification: { points: 5000, rank: 3, badges: ['Ambassador', 'Connector'] },
+    role: "company_admin",
+    managedCompanyId: "c1", // Claims Vodafone Egypt
+    headline: "HR Director @ Vodafone Intelligent Solutions",
+    avatarUrl: "https://i.pravatar.cc/150?u=sarah_h",
+    location: "Maadi, Cairo",
+    skills: ["Recruitment", "Organizational Development"],
     rating: 5.0
   },
   {
-    id: "u_ahmed",
+    id: "u3",
+    // Fix: Added slug property
+    slug: "ahmed-hassan",
     name: "Ahmed Hassan",
-    headline: "Civil Engineer at Orascom",
-    avatarUrl: "https://i.pravatar.cc/150?u=u_ahmed",
-    location: "6th of October, Giza",
-    skills: ["AutoCAD", "Project Management", "Structural Engineering"],
-    shiftsBooked: 5,
-    shiftsCompleted: 3, // 60% Reliability (High Risk)
-    careerLevel: 'STARTER',
-    gamification: { points: 200, rank: 156, badges: [] },
-    rating: 3.5
+    role: "user",
+    headline: "Senior Civil Engineer @ Orascom",
+    avatarUrl: "https://i.pravatar.cc/150?u=ahmed",
+    location: "Sheikh Zayed, Giza",
+    skills: ["Civil Engineering", "Project Management"],
+    shiftsBooked: 30,
+    shiftsCompleted: 28,
+    careerLevel: 'EXPERIENCED',
+    rating: 4.8
   },
   {
-    id: "u_laila",
+    id: "u4",
+    // Fix: Added slug property
+    slug: "laila-mourad",
     name: "Laila Mourad",
-    headline: "Senior UX Designer at Instabug",
-    avatarUrl: "https://i.pravatar.cc/150?u=u_laila",
-    location: "Zamalek, Cairo",
-    skills: ["Figma", "User Research", "Prototyping"],
-    verifiedSkills: ["Figma"],
-    challenges: [
-        {
-            type: 'DESIGN',
-            id: 'ch_des_1',
-            title: "E-Commerce Checkout Redesign",
-            description: "Simplifying the checkout flow to reduce cart abandonment.",
-            beforeImageUrl: "https://images.unsplash.com/photo-1556742049-0cfed4f7a07d?auto=format&fit=crop&w=800&q=80", // Placeholder for "Cluttered UI"
-            afterImageUrl: "https://images.unsplash.com/photo-1556742102-de63836034d2?auto=format&fit=crop&w=800&q=80" // Placeholder for "Clean UI"
-        }
-    ],
-    shiftsBooked: 12,
-    shiftsCompleted: 11,
+    role: "user",
+    headline: "UX Designer & Researcher",
+    avatarUrl: "https://i.pravatar.cc/150?u=laila",
+    location: "Heliopolis, Cairo",
+    skills: ["Figma", "UX Research", "Arabic (Native)"],
+    shiftsBooked: 20,
+    shiftsCompleted: 20,
     careerLevel: 'EXPERIENCED',
-    gamification: { points: 4200, rank: 12, badges: ['Visionary'] },
+    rating: 4.9
+  },
+  {
+    id: "u_admin",
+    // Fix: Added slug property
+    slug: "system-super-admin",
+    name: "System Super Admin",
+    role: "super_admin",
+    headline: "Platform Operations Control",
+    avatarUrl: "https://i.pravatar.cc/150?u=admin",
+    location: "New Cairo",
+    skills: ["System Administration", "Data Operations"],
+  },
+  {
+    id: "u5",
+    // Fix: Added slug property
+    slug: "omar-sharif",
+    name: "Omar Sharif",
+    role: "user",
+    headline: "Full Stack Developer",
+    avatarUrl: "https://i.pravatar.cc/150?u=omar",
+    location: "Zamalek, Cairo",
+    skills: ["React", "Node.js", "MongoDB"],
+    shiftsBooked: 15,
+    shiftsCompleted: 14,
+    careerLevel: 'EXPERIENCED',
     rating: 4.7
   },
   {
-    id: "u_omar",
-    name: "Omar Samy",
-    headline: "Backend Engineer (Go)",
-    avatarUrl: "https://i.pravatar.cc/150?u=u_omar",
-    location: "Maadi, Cairo",
-    skills: ["Go", "Kubernetes", "Microservices"],
-    verifiedSkills: ["Go"],
-    shiftsBooked: 8,
-    shiftsCompleted: 7,
+    id: "u6",
+    // Fix: Added slug property
+    slug: "nour-mansour",
+    name: "Nour Mansour",
+    role: "user",
+    headline: "Product Manager",
+    avatarUrl: "https://i.pravatar.cc/150?u=nour",
+    location: "New Cairo, Cairo",
+    skills: ["Agile", "Product Strategy"],
+    shiftsBooked: 10,
+    shiftsCompleted: 10,
     careerLevel: 'EXPERIENCED',
-    gamification: { points: 1800, rank: 89, badges: ['Coder'] },
-    rating: 4.5
-  },
-  {
-    id: "u_nour",
-    name: "Nour El-Sherif",
-    headline: "Product Manager at Valu",
-    avatarUrl: "https://i.pravatar.cc/150?u=u_nour",
-    location: "Heliopolis, Cairo",
-    skills: ["Product Strategy", "Agile", "Data Analysis"],
-    shiftsBooked: 15,
-    shiftsCompleted: 15,
-    careerLevel: 'LEAD',
-    gamification: { points: 6500, rank: 1, badges: ['Super Star', 'Mentor'] },
     rating: 5.0
   },
   {
-    id: "u_youssef",
-    name: "Youssef Magdy",
-    headline: "Data Scientist at CIB",
-    avatarUrl: "https://i.pravatar.cc/150?u=u_youssef",
-    location: "New Cairo, Cairo",
-    skills: ["Python", "Machine Learning", "SQL"],
-    verifiedSkills: ["Python", "SQL"],
-    shiftsBooked: 0,
-    shiftsCompleted: 0,
-    careerLevel: 'STARTER',
-    gamification: { points: 0, rank: 999, badges: [] },
-    rating: 0
+    id: "u7",
+    // Fix: Added slug property
+    slug: "youssef-ibrahim",
+    name: "Youssef Ibrahim",
+    role: "user",
+    headline: "Technical Support Specialist",
+    avatarUrl: "https://i.pravatar.cc/150?u=youssef",
+    location: "Dokki, Giza",
+    skills: ["Networking", "Linux"],
+    shiftsBooked: 25,
+    shiftsCompleted: 24,
+    careerLevel: 'EXPERIENCED',
+    rating: 4.6
   },
   {
-    id: "u_dina",
-    name: "Dina Kamel",
-    headline: "Digital Marketing Manager",
-    avatarUrl: "https://i.pravatar.cc/150?u=u_dina",
-    location: "Alexandria",
-    skills: ["SEO", "Content Strategy", "Performance Marketing"],
-    shiftsBooked: 40,
-    shiftsCompleted: 35,
-    careerLevel: 'SUPERVISOR',
-    gamification: { points: 5800, rank: 2, badges: ['Influencer'] },
-    rating: 4.8
+    id: "u8",
+    // Fix: Added slug property
+    slug: "dina-fouad",
+    name: "Dina Fouad",
+    role: "user",
+    headline: "Event Coordinator",
+    avatarUrl: "https://i.pravatar.cc/150?u=dina",
+    location: "Nasr City, Cairo",
+    skills: ["Communication", "Planning"],
+    shiftsBooked: 50,
+    shiftsCompleted: 49,
+    careerLevel: 'LEAD',
+    rating: 4.9
   }
 ];
 

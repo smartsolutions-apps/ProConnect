@@ -67,6 +67,8 @@ export const JobPostModal: React.FC<JobPostModalProps> = ({ isOpen, onClose, com
   // Construct Preview Object
   const previewJob: Job = {
     id: 'preview',
+    // Fix: Added slug property
+    slug: (role || 'job-title').toLowerCase().replace(/\s+/g, '-'),
     title: role || 'Job Title',
     companyId: 'preview_id',
     companyName: companyName,
