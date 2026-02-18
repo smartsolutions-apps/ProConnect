@@ -17,12 +17,7 @@ export const AdminDetailDrawer: React.FC<AdminDetailDrawerProps> = ({ isOpen, on
     const isUser = entity.type === 'user';
     const data = entity.data;
 
-    // Mock Applicants for Jobs
-    const mockApplicants = [
-        { id: 1, name: 'Ahmed Hassan', role: 'Senior Frontend Dev', avatar: 'https://i.pravatar.cc/150?u=1' },
-        { id: 2, name: 'Sarah Nabil', role: 'UI/UX Designer', avatar: 'https://i.pravatar.cc/150?u=2' },
-        { id: 3, name: 'Mohamed Ali', role: 'Full Stack Engineer', avatar: 'https://i.pravatar.cc/150?u=3' },
-    ];
+
 
     return (
         <>
@@ -51,7 +46,7 @@ export const AdminDetailDrawer: React.FC<AdminDetailDrawerProps> = ({ isOpen, on
                             <p className="text-sm text-slate-500 dark:text-slate-400 font-medium flex items-center gap-2">
                                 {entity.subtitle}
                                 <span className={`text-[10px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wider ${entity.type === 'job' ? 'bg-blue-100 text-blue-700' :
-                                        entity.type === 'company' ? 'bg-purple-100 text-purple-700' : 'bg-slate-100 text-slate-600'
+                                    entity.type === 'company' ? 'bg-purple-100 text-purple-700' : 'bg-slate-100 text-slate-600'
                                     }`}>
                                     {entity.type}
                                 </span>
@@ -95,23 +90,14 @@ export const AdminDetailDrawer: React.FC<AdminDetailDrawerProps> = ({ isOpen, on
 
                             <div className="space-y-4">
                                 <h3 className="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-wider flex items-center gap-2">
-                                    <Users size={16} /> Applicants ({mockApplicants.length})
+                                    <Users size={16} /> Applicants (0)
                                 </h3>
-                                <div className="space-y-3">
-                                    {mockApplicants.map(applicant => (
-                                        <div key={applicant.id} className="flex items-center justify-between p-3 bg-white dark:bg-[#1e1e1e] border border-slate-100 dark:border-[#333] rounded-xl hover:border-blue-200 transition-colors">
-                                            <div className="flex items-center gap-3">
-                                                <img src={applicant.avatar} alt={applicant.name} className="w-8 h-8 rounded-full" />
-                                                <div>
-                                                    <p className="text-sm font-bold text-slate-900 dark:text-white">{applicant.name}</p>
-                                                    <p className="text-xs text-slate-500">{applicant.role}</p>
-                                                </div>
-                                            </div>
-                                            <button className="p-1.5 text-amber-600 bg-amber-50 hover:bg-amber-100 rounded-lg transition-colors" title="Remove Applicant">
-                                                <Ban size={16} />
-                                            </button>
-                                        </div>
-                                    ))}
+                                <div className="p-8 text-center bg-slate-50 dark:bg-[#252525] rounded-xl border border-slate-100 dark:border-[#333]">
+                                    <div className="w-12 h-12 bg-slate-200 dark:bg-[#333] rounded-full flex items-center justify-center mx-auto mb-3">
+                                        <Users className="text-slate-400" size={20} />
+                                    </div>
+                                    <p className="text-sm font-bold text-slate-900 dark:text-white">0 Active Applicants</p>
+                                    <p className="text-xs text-slate-500 mt-1">No candidates have applied to this job yet.</p>
                                 </div>
                             </div>
 

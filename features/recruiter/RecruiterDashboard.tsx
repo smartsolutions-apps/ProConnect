@@ -45,13 +45,7 @@ export const RecruiterDashboard: React.FC = () => {
         { header: "Status", accessor: () => <span className="px-2 py-1 bg-green-100 text-green-700 text-xs rounded-full">Active</span> }
     ];
 
-    // --- Applicants Tab ---
-    // Mock applicants
-    const MOCK_APPLICANTS = [
-        { id: 1, name: "Ahmed Ali", role: "Frontend Developer", appliedFor: "Senior React Engineer", date: "2024-02-14" },
-        { id: 2, name: "Sara Mahmoud", role: "Product Manager", appliedFor: "Product Lead", date: "2024-02-13" },
-        { id: 3, name: "Omar Sherif", role: "UX Designer", appliedFor: "Senior UX Designer", date: "2024-02-12" },
-    ];
+
 
     return (
         <div className="min-h-screen bg-slate-50">
@@ -217,47 +211,20 @@ export const RecruiterDashboard: React.FC = () => {
 
                         {/* 4. APPLICANTS TAB */}
                         {activeTab === 'applicants' && (
-                            <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                                <h2 className="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
-                                    <Users className="text-purple-600" /> Recent Applicants
-                                </h2>
-
-                                <div className="overflow-x-auto">
-                                    <table className="w-full text-left">
-                                        <thead>
-                                            <tr className="border-b border-gray-100 text-xs text-gray-500 uppercase tracking-wider">
-                                                <th className="pb-3 font-bold">Candidate</th>
-                                                <th className="pb-3 font-bold">Applied For</th>
-                                                <th className="pb-3 font-bold">Date</th>
-                                                <th className="pb-3 font-bold text-right">Actions</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody className="text-sm">
-                                            {MOCK_APPLICANTS.map(app => (
-                                                <tr key={app.id} className="border-b border-gray-50 hover:bg-gray-50 transition-colors">
-                                                    <td className="py-4">
-                                                        <div className="flex items-center gap-3">
-                                                            <div className="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center text-purple-700 font-bold text-xs">
-                                                                {app.name.charAt(0)}
-                                                            </div>
-                                                            <div>
-                                                                <p className="font-bold text-gray-900">{app.name}</p>
-                                                                <p className="text-xs text-gray-500">{app.role}</p>
-                                                            </div>
-                                                        </div>
-                                                    </td>
-                                                    <td className="py-4 text-gray-700">{app.appliedFor}</td>
-                                                    <td className="py-4 text-gray-500">{app.date}</td>
-                                                    <td className="py-4 text-right">
-                                                        <button className="text-blue-600 hover:text-blue-800 font-bold text-xs">View CV</button>
-                                                        <span className="mx-2 text-gray-300">|</span>
-                                                        <button className="text-gray-500 hover:text-gray-700 font-bold text-xs">Message</button>
-                                                    </td>
-                                                </tr>
-                                            ))}
-                                        </tbody>
-                                    </table>
+                            <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-12 text-center">
+                                <div className="w-16 h-16 bg-purple-50 rounded-full flex items-center justify-center mx-auto mb-4">
+                                    <Users className="text-purple-600" size={32} />
                                 </div>
+                                <h3 className="text-lg font-bold text-gray-900 mb-2">No applicants yet</h3>
+                                <p className="text-gray-500 max-w-sm mx-auto mb-6">
+                                    Share your job post to start receiving applications. Candidates will appear here once they apply.
+                                </p>
+                                <button
+                                    onClick={() => setActiveTab('jobs')}
+                                    className="px-6 py-2 bg-purple-600 text-white font-bold rounded-lg hover:bg-purple-700 transition-colors"
+                                >
+                                    View Active Jobs
+                                </button>
                             </div>
                         )}
 
