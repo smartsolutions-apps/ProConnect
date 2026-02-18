@@ -276,7 +276,7 @@ export const AdminDashboard: React.FC = () => {
             {activeTab === 'health' && renderHealthTab()}
             {activeTab === 'users' && <DataTable data={USERS} columns={userColumns} searchPlaceholder="Search users by name..." />}
             {activeTab === 'companies' && <DataTable data={allCompanies} columns={companyColumns} searchPlaceholder="Search companies..." />}
-            {activeTab === 'jobs' && <DataTable data={JOBS} columns={jobColumns} searchPlaceholder="Search active listings..." />}
+            {activeTab === 'jobs' && <DataTable data={hydratedJobs} columns={jobColumns} searchPlaceholder="Search active listings..." />}
             {activeTab === 'import' && renderImportTab()}
 
             {/* Editor Modal */}

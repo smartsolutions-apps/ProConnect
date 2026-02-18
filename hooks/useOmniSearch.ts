@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
-import { useFirebaseData } from './useFirebaseData';
-import { USERS, POSTS } from '../data'; // Keep USERS and POSTS local for now
+import { useHydratedData } from '../context/DataHydrationContext';
+import { USERS } from '../data'; // Keep USERS local for now
 
 export type OmniResultType = 'user' | 'company' | 'job' | 'post';
 
@@ -16,7 +16,7 @@ export interface OmniResult {
 
 export const useOmniSearch = () => {
     const [searchTerm, setSearchTerm] = useState('');
-    const { firebaseCompanies, firebaseJobs, loading } = useFirebaseData();
+    const { companies: firebaseCompanies, jobs: firebaseJobs, newsFeed, isHydrating: loading } = useHydratedData();
 
     const results = useMemo(() => {
         const term = searchTerm.toLowerCase().trim();
@@ -73,28 +73,26 @@ export const useOmniSearch = () => {
             }
         });
 
-        // Filter Posts (Local)
-        if (Array.isArray(POSTS)) {
-            POSTS.forEach(post => {
-                const authorName = post.author?.name || '';
-                const content = post.content || '';
+        // Filter Posts (Live Firebase)
+        newsFeed.forEach(post => {
+            const authorName = post.author || '';
+            const content = post.title || ''; // Post title is main content for search
 
-                if (!term || content.toLowerCase().includes(term) || authorName.toLowerCase().includes(term)) {
-                    allResults.push({
-                        id: post.id,
-                        type: 'post',
-                        title: authorName || 'Unknown Author',
-                        subtitle: content.substring(0, 50) + '...',
-                        image: post.author?.avatarUrl,
-                        status: 'Published',
-                        data: post
-                    });
-                }
-            });
-        }
+            if (!term || content.toLowerCase().includes(term) || authorName.toLowerCase().includes(term)) {
+                allResults.push({
+                    id: post.id,
+                    type: 'post',
+                    title: authorName || 'Unknown Author',
+                    subtitle: content.substring(0, 50) + '...',
+                    image: post.image,
+                    status: 'Published',
+                    data: post
+                });
+            }
+        });
 
         return allResults;
-    }, [searchTerm, firebaseCompanies, firebaseJobs]);
+    }, [searchTerm, firebaseCompanies, firebaseJobs, newsFeed]);
 
     return { searchTerm, setSearchTerm, results, loading };
 };
