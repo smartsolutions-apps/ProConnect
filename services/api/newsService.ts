@@ -1,67 +1,174 @@
 
-import { Post } from '../../types';
+import { rewriteNewsArticle } from './geminiService';
+import { db } from '../../lib/firebase';
+import { collection, setDoc, doc, serverTimestamp } from 'firebase/firestore';
+import { logSystemActivity } from './apiLogger';
 
-const BRANDFETCH_CLIENT_ID = "1idiSqP5yegNdsQZndZ";
+const SERPER_API_KEY = import.meta.env.VITE_SERPER_KEY || '';
+const SERPER_API_URL = 'https://google.serper.dev/news';
 
-const CACHED_NEWS: Post[] = [
-  {
-    id: 'news_re_1',
-    authorId: 'admin_re',
-    authorName: 'Invest-Gate Egypt',
-    authorHeadline: 'Industry Media',
-    authorAvatar: `https://cdn.brandfetch.io/domain/invest-gate.me?c=${BRANDFETCH_CLIENT_ID}`,
-    content: 'Market Update: Central Bank interest rate changes and the impact on New Capital commercial units. Read the full analysis on how developers are adjusting payment plans.',
-    imageUrl: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=800&q=80',
-    likes: 342,
-    comments: 56,
-    timestamp: 'Just Now'
-  },
-  {
-    id: 'news_re_2',
-    authorId: 'ora_admin',
-    authorName: 'Ora Developers',
-    authorHeadline: 'Developer Announcement',
-    authorAvatar: `https://cdn.brandfetch.io/domain/oradevelopers.com?c=${BRANDFETCH_CLIENT_ID}`,
-    content: 'Ora Developers officially launches Silversands North Coast new phase. Brokers, check your portals for updated inventory and commission scales. #LuxuryLiving',
-    imageUrl: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80',
-    likes: 890,
-    comments: 120,
-    timestamp: '2h ago'
-  },
-  {
-    id: 'news_re_3',
-    authorId: 'aqarmap_insights',
-    authorName: 'Aqarmap Trends',
-    authorHeadline: 'Market Data',
-    authorAvatar: `https://cdn.brandfetch.io/domain/aqarmap.com.eg?c=${BRANDFETCH_CLIENT_ID}`,
-    content: 'Latest demand index shows a 12% increase in searches for Townhouses in Sheikh Zayed. Buyers are moving away from apartments towards gated villa communities.',
-    likes: 567,
-    comments: 42,
-    timestamp: '5h ago'
-  },
-  {
-    id: 'news_2',
-    authorId: 'admin',
-    authorName: 'ProConnect Tech',
-    authorHeadline: 'Tech Tracker',
-    authorAvatar: 'https://logo.clearbit.com/proconnect.eg',
-    content: 'Vodafone Egypt and Ericsson announce completion of 5G trials in Smart Village. Expect public rollout in major Cairo districts by late 2025.',
-    imageUrl: 'https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=800&q=80',
-    likes: 856,
-    comments: 42,
-    timestamp: '1h ago'
-  }
-];
+export type NewsCategory = 'Market News' | 'Construction' | 'Events' | 'Market Reports & Analysis';
 
-export const fetchIndustryNews = async (sector: 'TECH' | 'REAL_ESTATE'): Promise<Post[]> => {
+interface SerperNewsItem {
+  title: string;
+  link: string;
+  snippet: string;
+  date: string;
+  source: string;
+  imageUrl?: string;
+}
+
+const generateSlug = (text: string) => text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
+
+// Helper to check if integration is enabled and get key
+const getIntegrationConfig = (id: string) => {
+  if (typeof window === 'undefined') return { isEnabled: true, key: '' };
+
   try {
-    // Filter logic for demo
-    if (sector === 'REAL_ESTATE') {
-        return CACHED_NEWS.filter(p => p.id.includes('re') || p.content.includes('Capital'));
+    const stored = localStorage.getItem('admin_integrations');
+    if (!stored) return { isEnabled: true, key: '' };
+
+    const integrations = JSON.parse(stored);
+    const integration = integrations.find((i: any) => i.id === id);
+
+    if (!integration) return { isEnabled: true, key: '' };
+
+    return {
+      isEnabled: integration.isEnabled,
+      key: integration.apiKey || ''
+    };
+  } catch (e) {
+    console.warn("Failed to read integration config", e);
+    return { isEnabled: true, key: '' };
+  }
+};
+
+export const fetchAndGenerateNews = async (category: NewsCategory, count: number = 5, targetSource: string = "") => {
+  // 1. Check Kill Switch
+  const serperConfig = getIntegrationConfig('serper');
+  if (!serperConfig.isEnabled) {
+    console.warn("API Call Blocked: Serper integration is disabled in Admin Panel.");
+    throw new Error("Integration Disabled: Serper.dev");
+  }
+
+  // 2. Resolve API Key (Stored > Env)
+  const apiKey = serperConfig.key || SERPER_API_KEY;
+  if (!apiKey) {
+    throw new Error("Serper API Key is missing!");
+  }
+
+  let searchQuery = "Egypt real estate news";
+  if (category === 'Construction') {
+    searchQuery = "Egypt real estate construction updates";
+  } else if (category === 'Events') {
+    searchQuery = "Egypt real estate launches events";
+  } else if (category === 'Market Reports & Analysis') {
+    searchQuery = "Egypt real estate market report analysis 2025";
+  }
+
+  // Append target source if provided (e.g. "site:invest-gate.me")
+  if (targetSource) {
+    searchQuery += ` ${targetSource}`;
+  }
+
+  const payload = {
+    q: searchQuery,
+    num: count,
+    gl: "eg",
+    hl: "en"
+  };
+
+  try {
+    // 1. Fetch News from Serper
+    const response = await fetch(SERPER_API_URL, {
+      method: 'POST',
+      headers: {
+        'X-API-KEY': SERPER_API_KEY,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(payload)
+    });
+
+    if (!response.ok) {
+      throw new Error(`Serper API Error: ${response.statusText}`);
     }
-    return CACHED_NEWS.filter(p => !p.id.includes('re'));
-  } catch (err) {
-    console.error("News Fetch Error:", err);
-    return [];
+
+    const data = await response.json();
+    const newsItems: SerperNewsItem[] = data.news || [];
+
+    // 2. Process each item
+    const generatedPosts = [];
+
+    for (const item of newsItems) {
+      let rewrittenContent = "";
+
+      try {
+        // Rewrite with Gemini (Fail-Safe)
+        rewrittenContent = await rewriteNewsArticle(item.title, item.snippet, category);
+
+        // FAIL-SAFE: Abort if content is empty or contains "Failed"
+        if (!rewrittenContent || rewrittenContent.includes('Failed to generate')) {
+          throw new Error("Content generation failed or returned empty.");
+        }
+
+      } catch (geminiError) {
+        console.warn(`Gemini generation blocked/failed for: ${item.title}. Using fallback content.`);
+        // Fallback: Use original snippet + Source CTA
+        rewrittenContent = `${item.snippet}\n\nRead the full story at: ${item.source}`;
+
+        // Log warning but proceed
+        await logSystemActivity('System Warning', `Gemini failed for ${item.title}, used fallback.`, 'Success');
+      }
+
+      // Create Post Object
+      const post = {
+        content: rewrittenContent,
+        originalTitle: item.title,
+        originalLink: item.link,
+        source: item.source,
+        category: category,
+        imageUrl: 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="800" height="800" viewBox="0 0 24 24" fill="none" stroke="%230D8ABC" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>',
+        author: {
+          name: "ProConnect Bot",
+          role: "AI News Engine",
+          avatar: "https://ui-avatars.com/api/?name=Pro+Connect&background=0D8ABC&color=fff"
+        },
+        likes: 0,
+        comments: 0,
+        createdAt: serverTimestamp(),
+        isAutoGenerated: true
+      };
+
+      // 3. Save to Firebase with Clean ID
+      try {
+        const postId = `${generateSlug(item.title).substring(0, 40)}-${Math.floor(Math.random() * 1000)}`;
+        await setDoc(doc(db, 'posts', postId), post);
+
+        generatedPosts.push({ id: postId, ...post });
+        console.log(`Generated and saved post: ${postId}`);
+      } catch (firestoreError) {
+        console.error("Error saving post to Firestore:", firestoreError);
+      }
+    }
+
+    // LOG SUCCESS
+    await logSystemActivity(
+      'News Generated',
+      `Successfully generated ${generatedPosts.length} articles for ${category}`,
+      'Success',
+      { count: generatedPosts.length, category }
+    );
+
+    return generatedPosts;
+
+  } catch (error: any) {
+    console.error("Error in fetchAndGenerateNews:", error);
+    // LOG FAILURE
+    await logSystemActivity(
+      'System Error',
+      `Error fetching news: ${error.message}`,
+      'Failed'
+    );
+    throw error;
   }
 };

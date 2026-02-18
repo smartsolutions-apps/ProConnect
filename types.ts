@@ -182,14 +182,14 @@ export interface User {
   softSkills?: SoftSkillBadge[];
   interviewAvailability?: InterviewAvailability;
   appliedEvents?: string[]; // IDs of events they are pooling for
-  
+
   // CAREER PROGRESSION
   careerLevel?: CareerLevel;
 
   // GIG ECONOMY RELIABILITY METRICS
   shiftsBooked?: number;
   shiftsCompleted?: number;
-  
+
   // FINTECH WALLET
   wallet?: Wallet;
 
@@ -218,6 +218,9 @@ export interface Company {
   isVerified?: boolean; // Added for Super Admin verification
   isClaimed?: boolean; // Added for Claim architecture
   domain?: string; // Original domain for reference
+  employeeCount?: string; // Added for detailed profile
+  followerCount?: string; // Added for detailed profile
+  locations?: string[]; // Added for detailed profile
 }
 
 export interface Project {
@@ -260,7 +263,7 @@ export interface Application {
   appliedDate: string; // ISO String
   lastUpdate: string;
   lastUpdateDate: string; // ISO String for sorting
-  
+
   // SQUAD MODE
   type?: 'individual' | 'squad';
   squad?: Squad;

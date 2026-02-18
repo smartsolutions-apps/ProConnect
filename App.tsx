@@ -10,9 +10,15 @@ import { CURRENT_USER } from './data';
 
 // Views
 import { JobSeekerView } from './views/JobSeekerView';
-import { CompanyView } from './views/CompanyView';
-import { AdminDashboard } from './features/admin/AdminDashboard';
+
 import { Header } from './components/layout/Header';
+import { CompanyProfileView } from './features/company/CompanyProfileView';
+import { JobStandaloneView } from './features/jobs/JobStandaloneView';
+import { UserSettingsView } from './features/settings/UserSettingsView';
+import { AdminCommandCenter } from './features/admin/AdminCommandCenter'; // Updated import
+import { RecruiterDashboard } from './features/recruiter/RecruiterDashboard';
+import { AdminSettings } from './features/admin/AdminSettings';
+import { PlatformTour } from './features/landing/PlatformTour';
 
 function AppContent() {
   const { role } = useAuth();
@@ -25,36 +31,57 @@ function AppContent() {
     return <Navigate to="/en/" replace state={{ from: location }} />;
   }
 
-  // Admin View Logic
-  if (role === 'admin') {
-    return (
-      <div className="min-h-screen bg-slate-50 dark:bg-[#121212] transition-colors duration-300">
-        <Header 
-            user={CURRENT_USER} activeTab={'settings'} setActiveTab={() => {}} 
-            isStealthMode={false} toggleStealthMode={() => {}}
-        />
-        <main className="max-w-6xl mx-auto px-4 py-6">
-            <AdminDashboard />
-        </main>
-        <RoleSwitcher />
-      </div>
-    );
+  // Admin Route Protection & Redirection
+  if (location.pathname.includes('/admin') && role !== 'admin') {
+    // If user is not admin but tries to access admin, redirect to home
+    return <Navigate to={`/${lang}/`} replace />;
   }
 
-  // Company View Logic
-  if (role === 'company') {
-    return (
-      <div className="min-h-screen bg-slate-50 dark:bg-[#121212] transition-colors duration-300">
-        <CompanyView user={CURRENT_USER} />
-        <RoleSwitcher />
-      </div>
-    );
-  }
-
-  // Default Seeker View
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-[#121212] transition-colors duration-300">
-      <JobSeekerView user={CURRENT_USER} />
+      <Routes>
+        {/* Public / Seeker Routes */}
+        <Route path="/" element={<JobSeekerView user={CURRENT_USER} />} />
+        <Route path="jobs" element={<JobSeekerView user={CURRENT_USER} />} />
+        <Route path="jobs/:slug" element={<JobSeekerView user={CURRENT_USER} />} />
+        <Route path="job/:slug" element={<JobStandaloneView />} />
+
+        {/* Company Routes */}
+        <Route path="companies/:slug" element={<CompanyProfileView />} />
+        <Route path="recruiter" element={<RecruiterDashboard />} />
+        <Route path="tour" element={<PlatformTour />} />
+        {/* If we want a generic company dashboard route, we can add it here, 
+            but for now keeping it simple as per request */}
+
+        {/* Protected Routes */}
+        <Route path="settings" element={<UserSettingsView />} />
+
+        {/* Admin Route */}
+        <Route path="admin" element={
+          role === 'admin'
+            ? (
+              <div className="min-h-screen bg-slate-50 dark:bg-[#121212]">
+                <Header
+                  user={CURRENT_USER}
+                  activeTab='settings' // Admin usually implies settings/config context
+                  setActiveTab={() => { }}
+                  isStealthMode={false}
+                  toggleStealthMode={() => { }}
+                />
+                <main className="max-w-6xl mx-auto px-4 py-6">
+                  <AdminCommandCenter />
+                </main>
+                <RoleSwitcher />
+              </div>
+            )
+            : <Navigate to={`/${lang}/`} replace />
+        } />
+
+        {/* Catch all */}
+        <Route path="*" element={<Navigate to="" replace />} />
+      </Routes>
+
+      {/* Role Switcher is global for dev */}
       <RoleSwitcher />
     </div>
   );

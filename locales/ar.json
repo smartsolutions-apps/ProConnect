@@ -1,0 +1,37 @@
+{
+    "nav": {
+        "home": "الرئيسية",
+        "jobs": "الوظائف",
+        "companies": "المطورين",
+        "events": "الفعاليات",
+        "profile": "الملف الشخصي"
+    },
+    "jobs": {
+        "apply": "تقديم سريع",
+        "save": "حفظ",
+        "posted": "نشر منذ",
+        "applicants": "متقدمين"
+    },
+    "settings": {
+        "header": "الإعدادات",
+        "account": "تفضيلات الحساب",
+        "security": "تسالدخول والأمان",
+        "visibility": "الظهور",
+        "privacy": "خصوصية البيانات",
+        "ads": "بيانات الإعلانات",
+        "notifications": "الإشعارات",
+        "profile_info": "معلومات الملف الشخصي",
+        "display": "العرض",
+        "general": "تفضيلات عامة",
+        "account_mgmt": "إدارة الحساب",
+        "dark_mode": "الوضع الداكن",
+        "language": "اللغة",
+        "content_lang": "لغة المحتوى",
+        "autoplay": "تشغيل الفيديو تلقائياً",
+        "profile_photos": "إظهار صور الملف الشخصي",
+        "hibernate": "تجميد الحساب",
+        "close_account": "إغلاق وحذف الحساب",
+        "on": "مفعل",
+        "off": "معطل"
+    }
+}

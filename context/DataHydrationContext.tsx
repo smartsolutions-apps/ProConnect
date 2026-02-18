@@ -1,10 +1,9 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { Company, Job, Post, Project } from '../types';
-import { REAL_COMPANIES } from '../data/realCompanies';
-import { REAL_JOBS } from '../data/realJobs';
 import { REAL_PROJECTS } from '../data/realProjects';
-import { fetchIndustryNews } from '../services/api/newsService';
+import { db } from '../lib/firebase';
+import { collection, onSnapshot, query, orderBy } from 'firebase/firestore';
 
 interface DataHydrationContextType {
   companies: Company[];
@@ -14,30 +13,51 @@ interface DataHydrationContextType {
   isHydrating: boolean;
 }
 
-const DataHydrationContext = createContext<DataHydrationContextType | undefined>(undefined);
+export const DataHydrationContext = createContext<DataHydrationContextType | undefined>(undefined);
 
 export const DataHydrationProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [companies, setCompanies] = useState<Company[]>(REAL_COMPANIES);
-  const [jobs, setJobs] = useState<Job[]>(REAL_JOBS);
+  const [companies, setCompanies] = useState<Company[]>([]);
+  const [jobs, setJobs] = useState<Job[]>([]);
   const [projects, setProjects] = useState<Project[]>(REAL_PROJECTS);
   const [newsFeed, setNewsFeed] = useState<Post[]>([]);
   const [isHydrating, setIsHydrating] = useState(true);
 
   useEffect(() => {
-    const hydrateData = async () => {
-      // Fetch news from both sectors
-      const techNews = await fetchIndustryNews('TECH');
-      const reNews = await fetchIndustryNews('REAL_ESTATE');
-      
-      setNewsFeed([...techNews, ...reNews]);
-      setIsHydrating(false);
-    };
+    // 1. Subscribe to Companies
+    const unsubscribeCompanies = onSnapshot(collection(db, 'companies'), (snapshot) => {
+      const liveCompanies = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Company));
+      setCompanies(liveCompanies);
+    });
 
-    hydrateData();
+    // 2. Subscribe to Jobs
+    const unsubscribeJobs = onSnapshot(collection(db, 'jobs'), (snapshot) => {
+      const liveJobs = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Job));
+      setJobs(liveJobs);
+    });
+
+    // 3. Subscribe to News Feed
+    const qNews = query(collection(db, 'posts'), orderBy('createdAt', 'desc'));
+    const unsubscribeNews = onSnapshot(qNews, (snapshot) => {
+      const liveNews = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Post));
+      setNewsFeed(liveNews);
+      setIsHydrating(false);
+    });
+
+    return () => {
+      unsubscribeCompanies();
+      unsubscribeJobs();
+      unsubscribeNews();
+    };
   }, []);
 
   return (
-    <DataHydrationContext.Provider value={{ companies, jobs, newsFeed, projects, isHydrating }}>
+    <DataHydrationContext.Provider value={{
+      companies,
+      jobs,
+      newsFeed,
+      projects,
+      isHydrating
+    }}>
       {children}
     </DataHydrationContext.Provider>
   );

@@ -1,0 +1,37 @@
+{
+    "nav": {
+        "home": "Home",
+        "jobs": "Job Board",
+        "companies": "Developers",
+        "events": "Events",
+        "profile": "Profile"
+    },
+    "jobs": {
+        "apply": "Quick Apply",
+        "save": "Save",
+        "posted": "Posted",
+        "applicants": "applicants"
+    },
+    "settings": {
+        "header": "Settings",
+        "account": "Account preferences",
+        "security": "Sign in & security",
+        "visibility": "Visibility",
+        "privacy": "Data privacy",
+        "ads": "Advertising data",
+        "notifications": "Notifications",
+        "profile_info": "Profile information",
+        "display": "Display",
+        "general": "General preferences",
+        "account_mgmt": "Account management",
+        "dark_mode": "Dark mode",
+        "language": "Language",
+        "content_lang": "Content language",
+        "autoplay": "Autoplay videos",
+        "profile_photos": "Showing profile photos",
+        "hibernate": "Hibernate account",
+        "close_account": "Close and delete account",
+        "on": "On",
+        "off": "Off"
+    }
+}
