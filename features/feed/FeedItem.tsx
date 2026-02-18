@@ -22,11 +22,11 @@ export const FeedItem: React.FC<FeedItemProps> = ({ post }) => {
       {/* Header */}
       <div className="p-4 flex justify-between items-center">
         <div className="flex gap-3 items-center">
-          <img 
-            src={post.authorAvatar} 
-            alt="" 
+          <img
+            src={post.authorAvatar}
+            alt=""
             className="w-11 h-11 rounded-full object-cover ring-2 ring-slate-50 dark:ring-[#2d2d2d]"
-            onError={(e) => { e.currentTarget.src = `${FALLBACK_AVATAR}&name=${encodeURIComponent(post.authorName)}`; }}
+            onError={(e) => { e.currentTarget.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(post.authorName)}&background=f1f5f9&color=475569&bold=true`; }}
           />
           <div>
             <h4 className="text-sm font-bold text-slate-900 dark:text-white leading-none mb-1 hover:text-indigo-600 transition-colors cursor-pointer">
@@ -50,9 +50,9 @@ export const FeedItem: React.FC<FeedItemProps> = ({ post }) => {
       {/* Attachments */}
       {post.imageUrl && (
         <div className="relative aspect-video w-full bg-slate-100 dark:bg-[#2d2d2d]">
-          <img 
-            src={post.imageUrl} 
-            alt="" 
+          <img
+            src={post.imageUrl}
+            alt=""
             className="w-full h-full object-cover"
           />
         </div>
@@ -77,10 +77,10 @@ export const FeedItem: React.FC<FeedItemProps> = ({ post }) => {
 
       {/* Social Actions */}
       <div className="px-2 py-1 flex items-center border-t border-slate-50 dark:border-[#333333]">
-        <SocialAction 
-          icon={<Heart size={18} className={liked ? "fill-rose-500 text-rose-500" : ""} />} 
-          label={likesCount.toLocaleString()} 
-          active={liked} 
+        <SocialAction
+          icon={<Heart size={18} className={liked ? "fill-rose-500 text-rose-500" : ""} />}
+          label={likesCount.toLocaleString()}
+          active={liked}
           onClick={handleLike}
         />
         <SocialAction icon={<MessageCircle size={18} />} label={post.comments.toString()} />
@@ -91,11 +91,10 @@ export const FeedItem: React.FC<FeedItemProps> = ({ post }) => {
 };
 
 const SocialAction = ({ icon, label, active, onClick }: any) => (
-  <button 
+  <button
     onClick={onClick}
-    className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-colors text-xs font-bold ${
-      active ? 'text-rose-600' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-[#2d2d2d]'
-    }`}
+    className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-colors text-xs font-bold ${active ? 'text-rose-600' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-[#2d2d2d]'
+      }`}
   >
     {icon}
     <span>{label}</span>

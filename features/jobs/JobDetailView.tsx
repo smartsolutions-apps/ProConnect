@@ -61,15 +61,10 @@ export const JobDetailView: React.FC<JobDetailViewProps> = ({ job, onApply, user
                         onClick={handleCompanyClick}
                         className="w-24 h-24 rounded-2xl border-4 border-white dark:border-[#1e1e1e] overflow-hidden bg-white dark:bg-[#2d2d2d] shadow-md p-2 flex items-center justify-center mb-4 cursor-pointer hover:scale-105 transition-transform"
                     >
-                        <img
-                            src={job.companyLogo}
-                            alt={`${job.companyName} Logo`}
-                            className="w-full h-full object-contain"
-                            onError={(e) => {
-                                // Fallback if image fails
-                                e.currentTarget.style.display = 'none';
-                                e.currentTarget.parentElement?.classList.add('bg-slate-100');
-                            }}
+                        <CompanyLogo
+                            companyName={job.companyName}
+                            domain={domain}
+                            sizeClass="w-full h-full"
                         />
                     </div>
 
