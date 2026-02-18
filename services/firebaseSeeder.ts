@@ -1,17 +1,12 @@
-import { writeBatch, doc, collection, setDoc } from 'firebase/firestore';
+import { writeBatch, doc } from 'firebase/firestore';
 import { db } from '../lib/firebase';
 import { REAL_COMPANIES } from '../data/realCompanies';
 import { REAL_JOBS } from '../data/realJobs';
-
-
 
 export const seedDatabaseToFirebase = async () => {
     try {
         const batch = writeBatch(db);
         let operationCount = 0;
-
-
-
         // Seed Companies
         console.log(`Seeding ${REAL_COMPANIES.length} companies...`);
         REAL_COMPANIES.forEach(company => {
