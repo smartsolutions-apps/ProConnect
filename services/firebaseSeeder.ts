@@ -3,58 +3,14 @@ import { db } from '../lib/firebase';
 import { REAL_COMPANIES } from '../data/realCompanies';
 import { REAL_JOBS } from '../data/realJobs';
 
-const DUMMY_POSTS = [
-    {
-        title: "Egypt's Real Estate Market Sees 15% Growth in Q1",
-        category: "Market News"
-    },
-    {
-        title: "Top 5 Upcoming Commercial Hubs in New Cairo",
-        category: "Construction"
-    },
-    {
-        title: "Invest-Gate 2026 Awards Announced",
-        category: "Events"
-    },
-    {
-        title: "Sustainable Architecture takes over the North Coast",
-        category: "Construction"
-    },
-    {
-        title: "Global PropTech Innovations reaching MENA",
-        category: "Market News"
-    }
-];
 
-const seedPosts = async () => {
-    console.log(`Seeding ${DUMMY_POSTS.length} posts...`);
-    let count = 0;
-    for (const post of DUMMY_POSTS) {
-        const postId = post.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '') + '-' + Date.now();
-        const postData = {
-            ...post,
-            author: "ProConnect Bot",
-            authorRole: "AI News Engine",
-            image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2070&auto=format&fit=crop",
-            createdAt: new Date().toISOString(),
-            likes: Math.floor(Math.random() * 50),
-            comments: Math.floor(Math.random() * 10)
-        };
-
-        await setDoc(doc(db, 'posts', postId), postData);
-        count++;
-    }
-    return count;
-};
 
 export const seedDatabaseToFirebase = async () => {
     try {
         const batch = writeBatch(db);
         let operationCount = 0;
 
-        // Seed Posts
-        const postsSeeded = await seedPosts();
-        operationCount += postsSeeded;
+
 
         // Seed Companies
         console.log(`Seeding ${REAL_COMPANIES.length} companies...`);
