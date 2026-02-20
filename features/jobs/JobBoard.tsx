@@ -60,11 +60,12 @@ export const JobBoard: React.FC = () => {
       // 1. Safety Filter
       if (job.isHidden) return false;
 
-      // 2. Search Term (Title or Skills)
-      const matchesSearch = searchTerm === '' ||
-        job.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        job.companyName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        (job.skills && job.skills.some(skill => skill.toLowerCase().includes(searchTerm.toLowerCase())));
+      // 2. Search Term (Title, Company, or Skills)
+      const safeSearch = searchTerm.toLowerCase().trim();
+      const matchesSearch = safeSearch === '' ||
+        (job.title && job.title.toLowerCase().includes(safeSearch)) ||
+        (job.companyName && job.companyName.toLowerCase().includes(safeSearch)) ||
+        (job.skills && job.skills.some(skill => skill.toLowerCase().includes(safeSearch)));
 
       // 3. City Filter
       const matchesCity = selectedCity === 'All Locations' || job.location.includes(selectedCity);
