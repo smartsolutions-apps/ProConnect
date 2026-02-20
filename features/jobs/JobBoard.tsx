@@ -63,7 +63,8 @@ export const JobBoard: React.FC = () => {
       // 2. Search Term (Title or Skills)
       const matchesSearch = searchTerm === '' ||
         job.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        job.skills?.some(skill => skill.toLowerCase().includes(searchTerm.toLowerCase()));
+        job.companyName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (job.skills && job.skills.some(skill => skill.toLowerCase().includes(searchTerm.toLowerCase())));
 
       // 3. City Filter
       const matchesCity = selectedCity === 'All Locations' || job.location.includes(selectedCity);

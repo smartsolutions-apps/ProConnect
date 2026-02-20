@@ -16,7 +16,7 @@ export interface OmniResult {
 
 export const useOmniSearch = () => {
     const [searchTerm, setSearchTerm] = useState('');
-    const { companies: firebaseCompanies, jobs: firebaseJobs, newsFeed, isHydrating: loading } = useHydratedData();
+    const { companies, jobs, newsFeed, isHydrating: loading } = useHydratedData();
 
     const results = useMemo(() => {
         const term = searchTerm.toLowerCase().trim();
@@ -38,7 +38,7 @@ export const useOmniSearch = () => {
         });
 
         // Filter Companies (Live Firebase)
-        firebaseCompanies.forEach(company => {
+        companies.forEach(company => {
             if (!term || company.name?.toLowerCase().includes(term) || company.industry?.toLowerCase().includes(term)) {
                 allResults.push({
                     id: company.id,
@@ -56,7 +56,7 @@ export const useOmniSearch = () => {
         });
 
         // Filter Jobs (Live Firebase)
-        firebaseJobs.forEach(job => {
+        jobs.forEach(job => {
             if (!term || job.title?.toLowerCase().includes(term) || job.companyName?.toLowerCase().includes(term)) {
                 allResults.push({
                     id: job.id,
@@ -92,7 +92,7 @@ export const useOmniSearch = () => {
         });
 
         return allResults;
-    }, [searchTerm, firebaseCompanies, firebaseJobs, newsFeed]);
+    }, [searchTerm, companies, jobs, newsFeed]);
 
     return { searchTerm, setSearchTerm, results, loading };
 };

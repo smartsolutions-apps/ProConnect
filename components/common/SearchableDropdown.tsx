@@ -84,11 +84,11 @@ export const SearchableDropdown: React.FC<SearchableDropdownProps> = ({
             </div>
           </div>
           <div className="max-h-60 overflow-y-auto">
-            <div 
-                className={`px-3 py-2 text-sm cursor-pointer hover:bg-indigo-50 dark:hover:bg-indigo-900/20 hover:text-indigo-700 dark:hover:text-indigo-300 transition-colors ${value === '' ? 'bg-indigo-50 dark:bg-indigo-900/20 text-indigo-700 dark:text-indigo-300 font-medium' : 'text-gray-600 dark:text-gray-300'}`}
-                onClick={() => handleSelect('')}
+            <div
+              className={`px-3 py-2 text-sm cursor-pointer hover:bg-indigo-50 dark:hover:bg-indigo-900/20 hover:text-indigo-700 dark:hover:text-indigo-300 transition-colors ${value === '' ? 'bg-indigo-50 dark:bg-indigo-900/20 text-indigo-700 dark:text-indigo-300 font-medium' : 'text-gray-600 dark:text-gray-300'}`}
+              onClick={() => handleSelect('')}
             >
-                All Locations
+              {placeholder === 'City' ? 'All Locations' : placeholder === 'Company' ? 'All Companies' : placeholder === 'Industry' ? 'All Industries' : 'All'}
             </div>
             {filteredOptions.map((option) => (
               <div

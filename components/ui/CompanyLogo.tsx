@@ -29,19 +29,8 @@ export const CompanyLogo: React.FC<CompanyLogoProps> = ({
     };
 
     if (!domain || hasError) {
-        // Fallback: Initials
-        const initials = companyName
-            .split(' ')
-            .map(n => n[0])
-            .join('')
-            .substring(0, 2)
-            .toUpperCase();
-
-        return (
-            <div className={`${sizeClass} ${className} bg-slate-200 text-slate-700 font-bold flex items-center justify-center rounded-lg select-none`}>
-                {initials}
-            </div>
-        );
+        const fallbackUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(companyName)}&background=f8fafc&color=0f172a&bold=true&size=128&rounded=true`;
+        return <img src={fallbackUrl} alt={companyName} className={`${sizeClass} ${className} object-contain`} />;
     }
 
     return (

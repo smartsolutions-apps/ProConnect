@@ -4,6 +4,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useHydratedData } from '../../context/DataHydrationContext';
 import { JobCard } from '../jobs/JobCard';
 import { CompanySocialGrid } from './CompanySocialGrid';
+import { CompanyLogo } from '../../components/ui/CompanyLogo';
 import { Building2, MapPin, Users, Globe, ArrowLeft, CheckCircle2, UserPlus, Flag } from 'lucide-react';
 import { CURRENT_USER } from '../../data';
 import { ReportModal } from '../moderation/ReportModal';
@@ -46,46 +47,30 @@ export const CompanyProfileView: React.FC = () => {
     return (
         <div className="min-h-screen bg-slate-50 dark:bg-[#121212] transition-colors duration-300">
 
-            {/* Header / Banner Area */}
+            {/* Header Area */}
             <div className="bg-white dark:bg-[#1e1e1e] border-b border-gray-200 dark:border-[#2c2c2c]">
                 <div className="max-w-5xl mx-auto">
-                    {/* Banner */}
-                    <div className="h-48 rounded-b-xl bg-gradient-to-r from-blue-600 to-indigo-800 relative overflow-hidden">
-                        <div className="absolute inset-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
-                        <button
-                            onClick={() => navigate(-1)}
-                            className="absolute top-4 left-4 bg-white/20 hover:bg-white/30 text-white p-2 rounded-full backdrop-blur-sm transition-colors"
-                        >
-                            <ArrowLeft size={20} />
-                        </button>
-                    </div>
-
                     {/* Profile Info */}
-                    <div className="px-6 pb-6 relative">
-                        <div className="flex flex-col md:flex-row items-start md:items-end gap-6 -mt-16 mb-4">
-                            {/* Logo */}
-                            <div className="w-32 h-32 rounded-xl border-4 border-white dark:border-[#1e1e1e] bg-white dark:bg-[#2d2d2d] shadow-md overflow-hidden flex items-center justify-center p-2">
-                                <img
-                                    src={logoUrl}
-                                    alt={company.name}
-                                    className="w-full h-full object-contain"
-                                    onError={(e) => { e.currentTarget.src = FALLBACK_LOGO; }}
-                                />
+                    <div className="px-6 py-6 relative">
+                        <button onClick={() => navigate(-1)} className="mb-6 flex items-center gap-2 text-slate-500 hover:text-slate-900 transition-colors">
+                            <ArrowLeft size={18} /> Back to jobs
+                        </button>
+                        <div className="flex flex-col md:flex-row items-start justify-between gap-6 mb-8">
+                            <div className="flex items-center gap-6">
+                                <div className="w-24 h-24 rounded-2xl border border-slate-200 bg-white shadow-sm flex-shrink-0 p-2">
+                                    <CompanyLogo companyName={company.name} domain={domain} sizeClass="w-full h-full rounded-xl" />
+                                </div>
+                                <div>
+                                    <h1 className="text-3xl font-black text-gray-900 dark:text-white flex items-center gap-2">
+                                        {company.name}
+                                        <CheckCircle2 size={20} className="text-blue-500" fill="currentColor" color="white" />
+                                    </h1>
+                                    <p className="text-gray-500 dark:text-gray-400 font-medium mt-1">{company.industry} • {company.location || 'Cairo, Egypt'}</p>
+                                    <p className="text-sm text-gray-400 dark:text-gray-500 font-bold mt-1">12,450 followers</p>
+                                </div>
                             </div>
-
-                            {/* Text Info */}
-                            <div className="flex-1 pt-2 md:pt-0">
-                                <h1 className="text-3xl font-black text-gray-900 dark:text-white flex items-center gap-2">
-                                    {company.name}
-                                    <CheckCircle2 size={20} className="text-blue-500" fill="currentColor" color="white" />
-                                </h1>
-                                <p className="text-gray-500 dark:text-gray-400 font-medium mb-1">{company.industry} • {company.location || 'Cairo, Egypt'}</p>
-                                <p className="text-sm text-gray-400 dark:text-gray-500 font-bold">12,450 followers</p>
-                            </div>
-
-                            {/* Action Button */}
-                            <div className="w-full md:w-auto mt-4 md:mt-0 flex gap-2">
-                                <button className="flex-1 md:flex-none px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-full transition-colors flex items-center justify-center gap-2 shadow-sm">
+                            <div className="flex gap-2 w-full md:w-auto mt-2 md:mt-0">
+                                <button className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-full transition-colors flex items-center justify-center gap-2 shadow-sm">
                                     <UserPlus size={18} /> Follow
                                 </button>
                                 <button
@@ -121,6 +106,7 @@ export const CompanyProfileView: React.FC = () => {
                     </div>
                 </div>
             </div>
+
 
             {/* Content Area */}
             <div className="max-w-5xl mx-auto px-4 py-8">
@@ -236,10 +222,11 @@ export const CompanyProfileView: React.FC = () => {
                             <div className="space-y-4">
                                 {companies.filter(c => c.id !== company.id && c.industry === company.industry).slice(0, 4).map(c => (
                                     <div key={c.id} className="flex items-start gap-3">
-                                        <img
-                                            src={`https://cdn.brandfetch.io/domain/${c.domain}?c=${BRANDFETCH_CLIENT_ID}`}
-                                            className="w-10 h-10 rounded-md object-contain border border-gray-100 bg-white"
-                                            onError={(e) => { e.currentTarget.src = FALLBACK_LOGO; }}
+                                        <CompanyLogo
+                                            companyName={c.name}
+                                            domain={c.domain || c.name.toLowerCase().replace(/\s/g, '') + '.com'}
+                                            sizeClass="w-10 h-10"
+                                            className="rounded-md border border-gray-100 bg-white"
                                         />
                                         <div>
                                             <h4 className="font-bold text-sm text-gray-900 dark:text-white hover:underline cursor-pointer" onClick={() => navigate(`/en/companies/${c.slug}`)}>

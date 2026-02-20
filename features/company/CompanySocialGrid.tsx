@@ -26,7 +26,7 @@ export const CompanySocialGrid: React.FC<CompanySocialGridProps> = ({ company })
                 </div>
                 <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2">Connect Instagram</h3>
                 <p className="text-slate-500 dark:text-slate-400 max-w-sm mx-auto mb-6 text-sm">
-                    Link your company's Instagram account to automatically display your latest posts, culture, and updates here.
+                    Connect your Instagram account to sync your latest social updates.
                 </p>
                 <button className="px-6 py-2.5 bg-gradient-to-tr from-yellow-400 via-red-500 to-purple-500 text-white font-bold rounded-xl transition-transform hover:scale-105 shadow-md flex items-center justify-center gap-2 mx-auto text-sm">
                     <Instagram size={16} />
